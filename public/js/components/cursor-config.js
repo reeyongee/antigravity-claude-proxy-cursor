@@ -34,6 +34,7 @@ window.Components.cursorSettings = function () {
             availableModels: [
                 'gpt-4o',           // -> gemini-3-pro-high
                 'gpt-4o-mini',      // -> gemini-3-flash
+                'gpt-4.1',          // -> claude-opus-4-5-thinking (FREE PLAN)
                 'gpt-4',            // -> claude-opus-4-5-thinking
                 'gpt-3.5-turbo'     // -> gemini-3-flash
             ]
@@ -258,6 +259,7 @@ window.Components.cursorConfig = function () {
         availableModels: [
             'gpt-4o',           // -> gemini-3-pro-high
             'gpt-4o-mini',      // -> gemini-3-flash
+            'gpt-4.1',          // -> claude-opus-4-5-thinking (FREE PLAN)
             'gpt-4',            // -> claude-opus-4-5-thinking
             'gpt-3.5-turbo'     // -> gemini-3-flash
         ],

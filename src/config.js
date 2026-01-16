@@ -20,6 +20,7 @@ const DEFAULT_CONFIG = {
     modelMapping: {
         'gpt-4o': { mapping: 'gemini-3-pro-high' },
         'gpt-4o-mini': { mapping: 'gemini-3-flash' },
+        'gpt-4.1': { mapping: 'claude-opus-4-5-thinking' },
         'gpt-4': { mapping: 'claude-opus-4-5-thinking' },
         'gpt-3.5-turbo': { mapping: 'gemini-3-flash' }
     },

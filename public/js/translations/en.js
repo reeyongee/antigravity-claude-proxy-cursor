@@ -325,8 +325,8 @@ window.translations.en = {
     cannotBeEmpty: "{fieldName} cannot be empty",
     mustBeTrueOrFalse: "Value must be true or false",
     // Automatic Aliasing
-    autoAliasing: "Automatic Model Aliasing",
-    autoAliasingDesc: "Allow 'ag-' prefix to bypass Cursor validation (e.g. ag-gpt-4o -> gpt-4o)",
-    autoAliasingToggled: "Automatic aliasing {status}",
-    failedToUpdateAutoAliasing: "Failed to update automatic aliasing",
+    autoAliasing: "Model Prefix Aliasing",
+    autoAliasingDesc: "Strip 'ag-' prefix from model names (e.g. ag-gemini-3-pro → gemini-3-pro)",
+    autoAliasingToggled: "Model aliasing {status}",
+    failedToUpdateAutoAliasing: "Failed to update model aliasing",
 };

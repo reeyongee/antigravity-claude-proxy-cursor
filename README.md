@@ -34,11 +34,14 @@ In Cursor IDE, go to **Settings > Models > OpenAI** (or **General > Models** in 
 *   **API Key:** `sk-antigravity` (or any random text)
 *   **Model Name:** Add and select `gpt-4o` (recommended) or `gpt-4`
 
-> **How it works:** Cursor validates model names locally. By using standard OpenAI names (like `gpt-4o`), Cursor accepts the request. The proxy then automatically remaps it to the best available model:
-> - `gpt-4o` → `gemini-3-pro-high`
-> - `gpt-4` → `claude-sonnet-4-5-thinking`
-> - `gpt-4-turbo` → `gemini-2.5-pro`
-> - `gpt-3.5-turbo` → `gemini-3-pro`
+> **How it works:** Cursor's free plan rejects unknown model names. We bypass this by using standard OpenAI model names that Cursor accepts. The proxy then automatically remaps them to the actual models:
+>
+> | You Enter in Cursor | Actually Uses |
+> |---------------------|---------------|
+> | `gpt-4o` | `gemini-3-pro-high` |
+> | `gpt-4o-mini` | `gemini-3-flash` |
+> | `gpt-4` | `claude-opus-4-5-thinking` |
+> | `gpt-3.5-turbo` | `gemini-3-flash` |
 
 > **Note:** Cursor requires a public HTTPS URL (provided by Ngrok) to connect reliably. Localhost connections may fail.
 

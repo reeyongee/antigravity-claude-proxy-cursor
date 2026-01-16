@@ -19,10 +19,9 @@ const DEFAULT_CONFIG = {
     // This allows Cursor free plan users to bypass local model validation
     modelMapping: {
         'gpt-4o': { mapping: 'gemini-3-pro-high' },
-        'gpt-4o-mini': { mapping: 'gemini-3-pro' },
-        'gpt-4-turbo': { mapping: 'gemini-2.5-pro' },
-        'gpt-4': { mapping: 'claude-sonnet-4-5-thinking' },
-        'gpt-3.5-turbo': { mapping: 'gemini-3-pro' }
+        'gpt-4o-mini': { mapping: 'gemini-3-flash' },
+        'gpt-4': { mapping: 'claude-opus-4-5-thinking' },
+        'gpt-3.5-turbo': { mapping: 'gemini-3-flash' }
     },
     enableAgAliases: true
 };

@@ -33,10 +33,9 @@ window.Components.cursorSettings = function () {
             // Standard OpenAI names that Cursor accepts - proxy remaps these
             availableModels: [
                 'gpt-4o',           // -> gemini-3-pro-high
-                'gpt-4o-mini',      // -> gemini-3-pro
-                'gpt-4-turbo',      // -> gemini-2.5-pro
-                'gpt-4',            // -> claude-sonnet-4-5-thinking
-                'gpt-3.5-turbo'     // -> gemini-3-pro
+                'gpt-4o-mini',      // -> gemini-3-flash
+                'gpt-4',            // -> claude-opus-4-5-thinking
+                'gpt-3.5-turbo'     // -> gemini-3-flash
             ]
         },
 
@@ -258,10 +257,9 @@ window.Components.cursorConfig = function () {
         // Standard OpenAI names that Cursor accepts - proxy remaps these
         availableModels: [
             'gpt-4o',           // -> gemini-3-pro-high
-            'gpt-4o-mini',      // -> gemini-3-pro
-            'gpt-4-turbo',      // -> gemini-2.5-pro
-            'gpt-4',            // -> claude-sonnet-4-5-thinking
-            'gpt-3.5-turbo'     // -> gemini-3-pro
+            'gpt-4o-mini',      // -> gemini-3-flash
+            'gpt-4',            // -> claude-opus-4-5-thinking
+            'gpt-3.5-turbo'     // -> gemini-3-flash
         ],
 
         async init() {

@@ -15,7 +15,8 @@ const DEFAULT_CONFIG = {
     persistTokenCache: false,
     defaultCooldownMs: 10000,  // 10 seconds
     maxWaitBeforeErrorMs: 120000, // 2 minutes
-    modelMapping: {}
+    modelMapping: {},
+    enableAgAliases: true
 };
 
 // Config locations
@@ -45,13 +46,13 @@ function loadConfig() {
             const userConfig = JSON.parse(fileContent);
             config = { ...DEFAULT_CONFIG, ...userConfig };
         } else {
-             // Try looking in current dir for config.json as fallback
-             const localConfigPath = path.resolve('config.json');
-             if (fs.existsSync(localConfigPath)) {
-                 const fileContent = fs.readFileSync(localConfigPath, 'utf8');
-                 const userConfig = JSON.parse(fileContent);
-                 config = { ...DEFAULT_CONFIG, ...userConfig };
-             }
+            // Try looking in current dir for config.json as fallback
+            const localConfigPath = path.resolve('config.json');
+            if (fs.existsSync(localConfigPath)) {
+                const fileContent = fs.readFileSync(localConfigPath, 'utf8');
+                const userConfig = JSON.parse(fileContent);
+                config = { ...DEFAULT_CONFIG, ...userConfig };
+            }
         }
 
         // Environment overrides

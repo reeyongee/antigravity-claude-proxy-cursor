@@ -16,7 +16,7 @@ window.Components.cursorSettings = function () {
         config: {
             apiKey: '',
             baseUrl: '',
-            model: 'gemini-3-pro-high',
+            model: 'ag-gemini-3-pro-high',
             ngrokConnected: false
         },
 
@@ -31,11 +31,11 @@ window.Components.cursorSettings = function () {
         settings: {
             enable1MContext: false,
             availableModels: [
-                'gemini-3-pro-high',
-                'gemini-3-pro',
-                'gemini-2.5-pro',
-                'claude-sonnet-4-5-thinking',
-                'claude-opus-4-5-thinking'
+                'ag-gemini-3-pro-high',
+                'ag-gemini-3-pro',
+                'ag-gemini-2.5-pro',
+                'ag-claude-sonnet-4-5-thinking',
+                'ag-claude-opus-4-5-thinking'
             ]
         },
 
@@ -61,10 +61,13 @@ window.Components.cursorSettings = function () {
                 const data = await resp.json();
 
                 if (data.status === 'ok' && data.cursor) {
+                    let model = data.cursor.model || 'ag-gemini-3-pro-high';
+                    if (!model.startsWith('ag-')) model = 'ag-' + model;
+
                     this.config = {
                         apiKey: data.cursor.apiKey || '',
                         baseUrl: data.cursor.baseUrl || `http://localhost:${window.location.port || 8080}`,
-                        model: data.cursor.model || 'gemini-3-pro-high',
+                        model: model,
                         ngrokConnected: data.ngrok?.connected || false
                     };
                 }
@@ -248,18 +251,18 @@ window.Components.cursorConfig = function () {
     return {
         apiKey: '',
         baseUrl: '',
-        model: 'gemini-3-pro-high',
+        model: 'ag-gemini-3-pro-high',
         ngrokConnected: false,
         copied: null,
         copiedAll: false,
         dropdownOpen: false,
 
         availableModels: [
-            'gemini-3-pro-high',
-            'gemini-3-pro',
-            'gemini-2.5-pro',
-            'claude-sonnet-4-5-thinking',
-            'claude-opus-4-5-thinking'
+            'ag-gemini-3-pro-high',
+            'ag-gemini-3-pro',
+            'ag-gemini-2.5-pro',
+            'ag-claude-sonnet-4-5-thinking',
+            'ag-claude-opus-4-5-thinking'
         ],
 
         async init() {

@@ -324,4 +324,9 @@ window.translations.en = {
     mustBeAtMost: "{fieldName} must be at most {max}",
     cannotBeEmpty: "{fieldName} cannot be empty",
     mustBeTrueOrFalse: "Value must be true or false",
+    // Automatic Aliasing
+    autoAliasing: "Automatic Model Aliasing",
+    autoAliasingDesc: "Allow 'ag-' prefix to bypass Cursor validation (e.g. ag-gpt-4o -> gpt-4o)",
+    autoAliasingToggled: "Automatic aliasing {status}",
+    failedToUpdateAutoAliasing: "Failed to update automatic aliasing",
 };

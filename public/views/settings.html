@@ -426,6 +426,27 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- Automatic Model Aliasing -->
+                    <div class="form-control view-card border-space-border/50 hover:border-neon-cyan/50">
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-sm font-medium text-gray-200"
+                                    :class="serverConfig.enableAgAliases !== false ? 'text-neon-cyan' : ''"
+                                    x-text="$store.global.t('autoAliasing')">Automatic Model Aliasing</span>
+                                <span class="text-xs text-gray-500" x-text="$store.global.t('autoAliasingDesc')">Allow
+                                    'ag-' prefix to bypass Cursor validation (e.g. ag-gpt-4o -> gpt-4o)</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer"
+                                    :checked="serverConfig.enableAgAliases !== false"
+                                    @change="toggleAgAliases($el.checked)" aria-label="Auto aliasing toggle">
+                                <div
+                                    class="w-9 h-5 bg-space-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-600 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan peer-checked:after:bg-white">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ▼ Advanced Tuning (Fixed Logic) -->

@@ -15,16 +15,7 @@ const DEFAULT_CONFIG = {
     persistTokenCache: false,
     defaultCooldownMs: 10000,  // 10 seconds
     maxWaitBeforeErrorMs: 120000, // 2 minutes
-    // Default model mappings: Standard OpenAI names -> Antigravity models
-    // This allows Cursor free plan users to bypass local model validation
-    modelMapping: {
-        'gpt-4o': { mapping: 'gemini-3-pro-high' },
-        'gpt-4o-mini': { mapping: 'gemini-3-flash' },
-        'gpt-4.1': { mapping: 'claude-opus-4-5-thinking' },
-        'gpt-4': { mapping: 'claude-opus-4-5-thinking' },
-        'gpt-3.5-turbo': { mapping: 'gemini-3-flash' }
-    },
-    enableAgAliases: true
+    modelMapping: {}
 };
 
 // Config locations
@@ -54,13 +45,13 @@ function loadConfig() {
             const userConfig = JSON.parse(fileContent);
             config = { ...DEFAULT_CONFIG, ...userConfig };
         } else {
-            // Try looking in current dir for config.json as fallback
-            const localConfigPath = path.resolve('config.json');
-            if (fs.existsSync(localConfigPath)) {
-                const fileContent = fs.readFileSync(localConfigPath, 'utf8');
-                const userConfig = JSON.parse(fileContent);
-                config = { ...DEFAULT_CONFIG, ...userConfig };
-            }
+             // Try looking in current dir for config.json as fallback
+             const localConfigPath = path.resolve('config.json');
+             if (fs.existsSync(localConfigPath)) {
+                 const fileContent = fs.readFileSync(localConfigPath, 'utf8');
+                 const userConfig = JSON.parse(fileContent);
+                 config = { ...DEFAULT_CONFIG, ...userConfig };
+             }
         }
 
         // Environment overrides

@@ -16,7 +16,7 @@ window.Components.cursorSettings = function () {
         config: {
             apiKey: '',
             baseUrl: '',
-            model: 'gpt-4o',
+            model: 'gemini-3-pro-high',
             ngrokConnected: false
         },
 
@@ -30,13 +30,12 @@ window.Components.cursorSettings = function () {
 
         settings: {
             enable1MContext: false,
-            // Standard OpenAI names that Cursor accepts - proxy remaps these
             availableModels: [
-                'gpt-4o',           // -> gemini-3-pro-high
-                'gpt-4o-mini',      // -> gemini-3-flash
-                'gpt-4.1',          // -> claude-opus-4-5-thinking (FREE PLAN)
-                'gpt-4',            // -> claude-opus-4-5-thinking
-                'gpt-3.5-turbo'     // -> gemini-3-flash
+                'gemini-3-pro-high',
+                'gemini-3-pro',
+                'gemini-2.5-pro',
+                'claude-sonnet-4-5-thinking',
+                'claude-opus-4-5-thinking'
             ]
         },
 
@@ -65,7 +64,7 @@ window.Components.cursorSettings = function () {
                     this.config = {
                         apiKey: data.cursor.apiKey || '',
                         baseUrl: data.cursor.baseUrl || `http://localhost:${window.location.port || 8080}`,
-                        model: data.cursor.model || 'gpt-4o',
+                        model: data.cursor.model || 'gemini-3-pro-high',
                         ngrokConnected: data.ngrok?.connected || false
                     };
                 }
@@ -249,19 +248,18 @@ window.Components.cursorConfig = function () {
     return {
         apiKey: '',
         baseUrl: '',
-        model: 'gpt-4o',
+        model: 'gemini-3-pro-high',
         ngrokConnected: false,
         copied: null,
         copiedAll: false,
         dropdownOpen: false,
 
-        // Standard OpenAI names that Cursor accepts - proxy remaps these
         availableModels: [
-            'gpt-4o',           // -> gemini-3-pro-high
-            'gpt-4o-mini',      // -> gemini-3-flash
-            'gpt-4.1',          // -> claude-opus-4-5-thinking (FREE PLAN)
-            'gpt-4',            // -> claude-opus-4-5-thinking
-            'gpt-3.5-turbo'     // -> gemini-3-flash
+            'gemini-3-pro-high',
+            'gemini-3-pro',
+            'gemini-2.5-pro',
+            'claude-sonnet-4-5-thinking',
+            'claude-opus-4-5-thinking'
         ],
 
         async init() {

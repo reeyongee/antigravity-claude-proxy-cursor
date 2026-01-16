@@ -314,12 +314,10 @@
                                 <div
                                     class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
                                     <div class="min-w-0 flex-1">
-                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Model Name (Use
-                                            this in Cursor)</div>
+                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Model</div>
                                         <div class="text-sm font-mono text-yellow-400 truncate"
                                             x-text="cursorConfig.model"></div>
-                                        <div class="text-[9px] text-gray-600 mt-0.5">Automatically maps to
-                                            gemini-3-pro-high</div>
+                                        <div class="text-[9px] text-gray-600 mt-0.5">Example model to test with</div>
                                     </div>
                                     <button @click="copyToClipboard(cursorConfig.model, 'model')"
                                         class="p-2 rounded-lg transition-all duration-200"
@@ -338,28 +336,6 @@
                                             </svg>
                                         </span>
                                     </button>
-                                </div>
-                            </div>
-
-                            <!-- Model Mapping Info -->
-                            <div class="mt-4 p-3 bg-space-950/50 rounded-lg border border-space-border/20">
-                                <p class="text-[10px] text-gray-500 mb-2 font-medium uppercase tracking-wider">Why use
-                                    OpenAI model names?</p>
-                                <p class="text-xs text-gray-400">Cursor validates model names locally. By using standard
-                                    OpenAI names (like gpt-4o), Cursor accepts the request. The proxy then automatically
-                                    remaps:</p>
-                                <div class="mt-2 grid grid-cols-2 gap-1 text-[10px] font-mono">
-                                    <div class="text-green-400">gpt-4o <span class="text-gray-600">→</span> <span
-                                            class="text-neon-purple">gemini-3-pro-high</span></div>
-                                    <div class="text-green-400">gpt-4o-mini <span class="text-gray-600">→</span> <span
-                                            class="text-neon-purple">gemini-3-flash</span></div>
-                                    <div class="text-yellow-400">gpt-4.1 <span class="text-gray-600">→</span> <span
-                                            class="text-neon-purple">claude-opus-4-5-thinking</span> <span
-                                            class="text-yellow-500">(FREE)</span></div>
-                                    <div class="text-green-400">gpt-4 <span class="text-gray-600">→</span> <span
-                                            class="text-neon-purple">claude-opus-4-5-thinking</span></div>
-                                    <div class="text-green-400">gpt-3.5-turbo <span class="text-gray-600">→</span> <span
-                                            class="text-neon-purple">gemini-3-flash</span></div>
                                 </div>
                             </div>
                         </div>
@@ -421,7 +397,7 @@
                 cursorConfig: {
                     apiKey: '',
                     baseUrl: '',
-                    model: 'gpt-4o'
+                    model: 'gemini-3-pro-high'
                 },
 
                 async init() {

@@ -164,38 +164,6 @@ window.Components.serverConfig = () => ({
         }
     },
 
-    // Toggle Automatic Model Aliasing with instant save
-    async toggleAgAliases(enabled) {
-        const store = Alpine.store('global');
-
-        // Optimistic update
-        const previousValue = this.serverConfig.enableAgAliases;
-        this.serverConfig.enableAgAliases = enabled;
-
-        try {
-            const { response, newPassword } = await window.utils.request('/api/config', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ enableAgAliases: enabled })
-            }, store.webuiPassword);
-
-            if (newPassword) store.webuiPassword = newPassword;
-
-            const data = await response.json();
-            if (data.status === 'ok') {
-                const status = enabled ? store.t('enabledStatus') : store.t('disabledStatus');
-                store.showToast(store.t('autoAliasingToggled', { status }), 'success');
-                await this.fetchServerConfig(); // Confirm server state
-            } else {
-                throw new Error(data.error || store.t('failedToUpdateAutoAliasing'));
-            }
-        } catch (e) {
-            // Rollback on error
-            this.serverConfig.enableAgAliases = previousValue;
-            store.showToast(store.t('failedToUpdateAutoAliasing') + ': ' + e.message, 'error');
-        }
-    },
-
     // Generic debounced save method for numeric configs with validation
     async saveConfigField(fieldName, value, displayName, validator = null) {
         const store = Alpine.store('global');

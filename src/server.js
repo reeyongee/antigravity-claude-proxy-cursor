@@ -676,16 +676,6 @@ async function handleChatCompletions(req, res) {
 
         // Resolve model mapping if configured
         let requestedModel = anthropicRequest.model;
-
-        // Automatic Aliasing: Strip 'ag-' prefix if enabled
-        // This allows users to use 'ag-model-name' in Cursor to bypass client-side validation
-        if (config.enableAgAliases && requestedModel.startsWith('ag-')) {
-            const aliasedModel = requestedModel.substring(3);
-            logger.info(`[OpenAI API] Auto-aliasing: ${requestedModel} -> ${aliasedModel}`);
-            requestedModel = aliasedModel;
-            anthropicRequest.model = requestedModel;
-        }
-
         const modelMapping = config.modelMapping || {};
         if (modelMapping[requestedModel] && modelMapping[requestedModel].mapping) {
             const targetModel = modelMapping[requestedModel].mapping;

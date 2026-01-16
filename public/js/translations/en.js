@@ -324,9 +324,4 @@ window.translations.en = {
     mustBeAtMost: "{fieldName} must be at most {max}",
     cannotBeEmpty: "{fieldName} cannot be empty",
     mustBeTrueOrFalse: "Value must be true or false",
-    // Automatic Aliasing
-    autoAliasing: "Model Prefix Aliasing",
-    autoAliasingDesc: "Strip 'ag-' prefix from model names (e.g. ag-gemini-3-pro → gemini-3-pro)",
-    autoAliasingToggled: "Model aliasing {status}",
-    failedToUpdateAutoAliasing: "Failed to update model aliasing",
 };

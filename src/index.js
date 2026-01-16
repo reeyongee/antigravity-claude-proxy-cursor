@@ -85,19 +85,18 @@ function printStartupBanner(ngrokUrl) {
 
     console.log(`
 ╔══════════════════════════════════════════════════════════════╗
-║               🚀 Cursor Antigravity Proxy                             ║
+║               🚀 Cursor Antigravity Proxy                    ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
 ║  Status: ✅ Running                                          ║
 ║                                                              ║
-║  Local URL:   ${(localUrl + ' '.repeat(45)).slice(0, 45)}║
-${ngrokUrl ? `║  Public URL:  ${(ngrokUrl + ' '.repeat(45)).slice(0, 45)}║` : '║  Public URL:  Not configured (run setup)                    ║'}
+║  Ngrok URL:   ${(ngrokUrl ? ngrokUrl : 'Waiting for tunnel...').padEnd(45).slice(0, 45)}║
 ║                                                              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  📋 Your Cursor Settings:                                    ║
 ║                                                              ║
 ║  API Key:     ${(apiKey.slice(0, 40) + ' '.repeat(45)).slice(0, 45)}║
-║  Base URL:    ${((ngrokUrl || localUrl) + ' '.repeat(45)).slice(0, 45)}║
+║  Base URL:    ${((ngrokUrl || 'REQUIRES NGROK URL') + ' '.repeat(45)).slice(0, 45)}║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 `);

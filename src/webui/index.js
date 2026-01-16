@@ -716,7 +716,7 @@ export function mountWebUI(app, dirname, accountManager) {
                 status: 'ok',
                 cursor: {
                     apiKey: state.apiKey || 'Not configured',
-                    baseUrl: state.ngrokUrl || `http://localhost:${state.port}`,
+                    baseUrl: state.ngrokUrl || 'Waiting for Ngrok Tunnel...',
                     model: state.defaultModel || 'gemini-3-pro-high',
                     isReady: state.isReady && !!state.ngrokUrl,
                     needsSetup: state.needsSetup

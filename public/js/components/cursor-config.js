@@ -16,7 +16,7 @@ window.Components.cursorSettings = function () {
         config: {
             apiKey: '',
             baseUrl: '',
-            model: 'ag-gemini-3-pro-high',
+            model: 'gpt-4o',
             ngrokConnected: false
         },
 
@@ -30,12 +30,13 @@ window.Components.cursorSettings = function () {
 
         settings: {
             enable1MContext: false,
+            // Standard OpenAI names that Cursor accepts - proxy remaps these
             availableModels: [
-                'ag-gemini-3-pro-high',
-                'ag-gemini-3-pro',
-                'ag-gemini-2.5-pro',
-                'ag-claude-sonnet-4-5-thinking',
-                'ag-claude-opus-4-5-thinking'
+                'gpt-4o',           // -> gemini-3-pro-high
+                'gpt-4o-mini',      // -> gemini-3-pro
+                'gpt-4-turbo',      // -> gemini-2.5-pro
+                'gpt-4',            // -> claude-sonnet-4-5-thinking
+                'gpt-3.5-turbo'     // -> gemini-3-pro
             ]
         },
 
@@ -61,13 +62,10 @@ window.Components.cursorSettings = function () {
                 const data = await resp.json();
 
                 if (data.status === 'ok' && data.cursor) {
-                    let model = data.cursor.model || 'ag-gemini-3-pro-high';
-                    if (!model.startsWith('ag-')) model = 'ag-' + model;
-
                     this.config = {
                         apiKey: data.cursor.apiKey || '',
                         baseUrl: data.cursor.baseUrl || `http://localhost:${window.location.port || 8080}`,
-                        model: model,
+                        model: data.cursor.model || 'gpt-4o',
                         ngrokConnected: data.ngrok?.connected || false
                     };
                 }
@@ -251,18 +249,19 @@ window.Components.cursorConfig = function () {
     return {
         apiKey: '',
         baseUrl: '',
-        model: 'ag-gemini-3-pro-high',
+        model: 'gpt-4o',
         ngrokConnected: false,
         copied: null,
         copiedAll: false,
         dropdownOpen: false,
 
+        // Standard OpenAI names that Cursor accepts - proxy remaps these
         availableModels: [
-            'ag-gemini-3-pro-high',
-            'ag-gemini-3-pro',
-            'ag-gemini-2.5-pro',
-            'ag-claude-sonnet-4-5-thinking',
-            'ag-claude-opus-4-5-thinking'
+            'gpt-4o',           // -> gemini-3-pro-high
+            'gpt-4o-mini',      // -> gemini-3-pro
+            'gpt-4-turbo',      // -> gemini-2.5-pro
+            'gpt-4',            // -> claude-sonnet-4-5-thinking
+            'gpt-3.5-turbo'     // -> gemini-3-pro
         ],
 
         async init() {

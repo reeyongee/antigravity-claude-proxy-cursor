@@ -15,7 +15,15 @@ const DEFAULT_CONFIG = {
     persistTokenCache: false,
     defaultCooldownMs: 10000,  // 10 seconds
     maxWaitBeforeErrorMs: 120000, // 2 minutes
-    modelMapping: {},
+    // Default model mappings: Standard OpenAI names -> Antigravity models
+    // This allows Cursor free plan users to bypass local model validation
+    modelMapping: {
+        'gpt-4o': { mapping: 'gemini-3-pro-high' },
+        'gpt-4o-mini': { mapping: 'gemini-3-pro' },
+        'gpt-4-turbo': { mapping: 'gemini-2.5-pro' },
+        'gpt-4': { mapping: 'claude-sonnet-4-5-thinking' },
+        'gpt-3.5-turbo': { mapping: 'gemini-3-pro' }
+    },
     enableAgAliases: true
 };
 

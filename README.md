@@ -32,9 +32,13 @@ The dashboard will open automatically at `http://localhost:8080`.
 In Cursor IDE, go to **Settings > Models > OpenAI** (or **General > Models** in newer versions):
 *   **Base URL:** Copy the **Ngrok URL** displayed on the dashboard (e.g., `https://xxxx-xx.ngrok-free.app/v1`)
 *   **API Key:** `sk-antigravity` (or any random text)
-*   **Model Name:** Add and select `ag-claude-sonnet-4-5-thinking` or `ag-gemini-3-pro-high`
+*   **Model Name:** Add and select `gpt-4o` (recommended) or `gpt-4`
 
-> **Pro Tip:** Use the `ag-` prefix (e.g., `ag-gemini-3-pro`) to bypass Cursor's "Invalid Model" errors. The proxy automatically removes this prefix before sending the request.
+> **How it works:** Cursor validates model names locally. By using standard OpenAI names (like `gpt-4o`), Cursor accepts the request. The proxy then automatically remaps it to the best available model:
+> - `gpt-4o` → `gemini-3-pro-high`
+> - `gpt-4` → `claude-sonnet-4-5-thinking`
+> - `gpt-4-turbo` → `gemini-2.5-pro`
+> - `gpt-3.5-turbo` → `gemini-3-pro`
 
 > **Note:** Cursor requires a public HTTPS URL (provided by Ngrok) to connect reliably. Localhost connections may fail.
 

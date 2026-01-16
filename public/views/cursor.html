@@ -1,0 +1,417 @@
+<div x-data="cursorSettings()" x-init="init()" class="view-container">
+    <!-- Header -->
+    <div class="flex items-center justify-between gap-4 mb-6">
+        <div class="flex flex-wrap items-center gap-4">
+            <h1 class="text-2xl font-bold text-white tracking-tight">
+                Cursor IDE
+            </h1>
+            <div
+                class="flex items-center h-6 px-3 rounded-full bg-space-800/80 border border-space-border/50 shadow-sm backdrop-blur-sm">
+                <span class="text-[10px] font-mono text-gray-400 uppercase tracking-wider">
+                    CONFIGURATION & SETUP
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Cursor Settings Card -->
+    <div class="view-card bg-gradient-to-br from-indigo-900/20 to-purple-900/20 border-space-border mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-neon-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Your Cursor Settings
+            </h3>
+            <button @click="copyAll()"
+                class="btn btn-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 border-0 text-white gap-2 shadow-lg shadow-purple-500/20">
+                <span x-show="!copiedAll" class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-12a2 2 0 00-2-2h-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Copy All Settings
+                </span>
+                <span x-show="copiedAll" class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Copied!
+                </span>
+            </button>
+        </div>
+
+        <!-- Config Values -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- Access Token (Proxy API Key) -->
+            <div
+                class="flex items-center justify-between bg-space-900/50 rounded-lg px-4 py-3 border border-space-border">
+                <div class="min-w-0 flex-1">
+                    <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Proxy Access Token</div>
+                    <div class="text-sm font-mono text-green-400 truncate"
+                        x-text="config.apiKey ? (config.apiKey.substring(0, 24) + '...') : 'Not set'"></div>
+                    <div class="text-[9px] text-gray-600 mt-0.5">Enter this key in Cursor</div>
+                </div>
+                <button @click="copy(config.apiKey, 'apiKey')" class="p-2 rounded-lg transition-all duration-200"
+                    :class="copied === 'apiKey' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
+                    <span x-show="copied !== 'apiKey'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span x-show="copied === 'apiKey'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Base URL -->
+            <div
+                class="flex items-center justify-between bg-space-900/50 rounded-lg px-4 py-3 border border-space-border">
+                <div class="min-w-0 flex-1">
+                    <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Base URL</div>
+                    <div class="text-sm font-mono truncate"
+                        :class="config.ngrokConnected ? 'text-green-400' : 'text-yellow-400'" x-text="config.baseUrl">
+                    </div>
+                    <div class="text-[9px] text-gray-600 mt-0.5">Use this URL in Cursor settings</div>
+                </div>
+                <button @click="copy(config.baseUrl, 'baseUrl')" class="p-2 rounded-lg transition-all duration-200"
+                    :class="copied === 'baseUrl' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
+                    <span x-show="copied !== 'baseUrl'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span x-show="copied === 'baseUrl'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Available Models (Dropdown to Copy) -->
+            <div
+                class="flex items-center justify-between bg-space-900/50 rounded-lg px-4 py-3 border border-space-border relative overflow-visible">
+                <div class="min-w-0 flex-1 relative">
+                    <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Available Models</div>
+
+                    <div x-data="{ open: false }" class="relative" @click.outside="open = false">
+                        <button @click="open = !open"
+                            class="flex items-center gap-2 bg-space-900 border border-space-border/50 text-white text-xs font-mono px-3 py-2 rounded-lg hover:border-indigo-500/50 transition-colors w-full justify-between">
+                            <span x-text="settings.availableModels[0] || 'Loading...'"></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-400" x-show="settings.availableModels.length > 1"
+                                    x-text="'+' + (settings.availableModels.length - 1)"></span>
+                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </button>
+
+                        <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute left-0 top-full mt-2 w-full bg-space-900 border border-space-border rounded-lg shadow-xl z-50 overflow-hidden">
+                            <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                <template x-for="(modelName, index) in settings.availableModels" :key="index">
+                                    <button @click="copy(modelName, 'model'); open = false"
+                                        class="w-full text-left px-3 py-2 rounded hover:bg-space-800 text-xs font-mono text-gray-300 flex items-center justify-between group transition-colors">
+                                        <span x-text="modelName"></span>
+                                        <span
+                                            class="opacity-0 group-hover:opacity-100 text-[10px] text-indigo-400 uppercase tracking-wider">Copy</span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[9px] text-gray-600 mt-0.5">Click to view & copy model IDs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Setup Guide -->
+        <div class="mt-4 p-5 bg-space-900/30 rounded-lg border border-space-border/20">
+            <h4
+                class="text-sm font-bold text-gray-400 mb-4 flex items-center gap-2 border-b border-space-border/20 pb-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Quick Setup in Cursor
+            </h4>
+            <div class="text-sm text-gray-400 space-y-4">
+                <div class="flex gap-4">
+                    <div
+                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        1</div>
+                    <div>
+                        <p class="font-medium text-gray-300">Go to Cursor Settings → Models → OpenAI</p>
+                        <p class="text-xs text-gray-500 mt-1">Note: Antigravity acts as an OpenAI-compatible proxy, so
+                            checking the Google or Anthropic tabs will NOT work.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div
+                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        2</div>
+                    <div>
+                        <p class="font-medium text-gray-300">Configure API Key</p>
+                        <div
+                            class="mt-1 p-3 bg-black/30 rounded border border-space-border text-xs font-mono text-gray-400">
+                            Key: <span class="text-green-400"
+                                x-text="config.apiKey ? (config.apiKey.substring(0, 12) + '...') : '...'"></span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Copy the <strong>Proxy Access Token</strong> from above.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div
+                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        3</div>
+                    <div>
+                        <p class="font-medium text-gray-300">Enable "Override OpenAI Base URL"</p>
+                        <div class="mt-1 flex items-center gap-2">
+                            <code
+                                class="bg-black/30 px-2 py-1 rounded text-xs font-mono text-green-400 border border-space-border"
+                                x-text="config.baseUrl"></code>
+                            <button @click="copy(config.baseUrl, 'baseUrl')" class="text-gray-500 hover:text-white"
+                                title="Copy URL">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div
+                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        4</div>
+                    <div>
+                        <p class="font-medium text-gray-300">Add Model Name (Important!)</p>
+                        <p class="text-xs text-gray-500 mt-1">You must manually add the model ID below to Cursor's model
+                            list:</p>
+                        <div class="mt-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                            <div class="flex items-center gap-2 text-yellow-500 font-mono text-xs">
+                                <span class="text-lg">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    Add <span class="px-1 py-0.5 bg-black/20 rounded font-bold"
+                                        x-text="config.model"></span> and verify enabled.
+                                    <div class="opacity-70 font-sans mt-0.5">Different from Cursor's default names (e.g.
+                                        use 'gemini-3-pro' not 'Gemini 3 Pro').</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Two Column Layout for Setup -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Left Column: Ngrok & Google -->
+        <div class="flex flex-col gap-6 h-full">
+            <!-- ngrok Configuration -->
+            <div class="view-card flex-1 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <svg class="w-5 h-5 text-neon-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        ngrok Tunnel
+                    </h3>
+                    <div class="flex items-center gap-2 text-xs font-mono"
+                        :class="status.ngrokRunning ? 'text-green-400' : 'text-yellow-400'">
+                        <div class="w-2 h-2 rounded-full"
+                            :class="status.ngrokRunning ? 'bg-green-400' : 'bg-yellow-400'">
+                        </div>
+                        <span x-text="status.ngrokRunning ? 'Connected' : 'Not Running'"></span>
+                    </div>
+                </div>
+
+                <div x-show="!status.ngrokInstalled" class="p-4 bg-red-900/20 border border-red-500/30 rounded-lg mb-4">
+                    <p class="text-red-400 text-sm font-medium flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        ngrok is not installed
+                    </p>
+                    <p class="text-gray-400 text-xs mt-1">Install with: <code
+                            class="text-green-400">brew install ngrok</code></p>
+                </div>
+
+                <div x-show="status.ngrokInstalled && !status.ngrokConfigured" class="space-y-3">
+                    <div>
+                        <label class="text-xs font-mono text-gray-500 uppercase block mb-1">ngrok Auth Token</label>
+                        <input x-model="ngrokToken" type="password" placeholder="Enter your ngrok auth token"
+                            class="input input-bordered w-full bg-space-900 border-space-border focus:border-indigo-500">
+                    </div>
+                    <a href="https://dashboard.ngrok.com/get-started/your-authtoken" target="_blank"
+                        class="text-xs text-indigo-400 hover:underline inline-flex items-center gap-1">
+                        Get your free token →
+                    </a>
+                    <button @click="configureNgrok()" :disabled="!ngrokToken || loading" class="btn btn-primary w-full">
+                        <span x-show="!loading">Configure ngrok</span>
+                        <span x-show="loading" class="loading loading-spinner loading-sm"></span>
+                    </button>
+                </div>
+
+                <div x-show="status.ngrokConfigured && status.ngrokRunning"
+                    class="flex-grow flex flex-col justify-center space-y-3">
+                    <div class="p-3 bg-green-900/20 border border-space-border rounded-lg">
+                        <p class="text-green-400 text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Tunnel active
+                        </p>
+                        <p class="text-xs text-gray-400 font-mono mt-1 truncate" x-text="config.baseUrl"></p>
+                    </div>
+
+                    <div x-show="status.ngrokConfigured && !status.ngrokRunning" class="space-y-3">
+                        <div class="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+                            <p class="text-yellow-400 text-sm flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                ngrok configured but not running
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">Restart the server to start tunnel</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Google Account -->
+        <div class="view-card flex-1 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-neon-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Google Account
+                </h3>
+                <div class="flex items-center gap-2 text-xs font-mono"
+                    :class="status.hasAccounts ? 'text-green-400' : 'text-yellow-400'">
+                    <span x-text="status.hasAccounts ? status.accountCount + ' connected' : 'None'"></span>
+                </div>
+            </div>
+
+            <div x-show="status.hasAccounts" class="p-3 bg-green-900/20 border border-space-border rounded-lg mb-6">
+                <p class="text-green-400 text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span x-text="status.accountCount"></span> account(s) connected
+                </p>
+            </div>
+
+            <button @click="addAccount()" :disabled="loading"
+                class="btn w-full bg-blue-600 hover:bg-blue-700 border-0 text-white gap-2">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="currentColor"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="currentColor"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                    <path fill="currentColor"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
+                <span x-text="status.hasAccounts ? 'Add Another Account' : 'Sign in with Google'"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Model Settings (Right Column) -->
+    <!-- Model Settings (Right Column) -->
+    <div class="view-card overflow-visible p-6 h-full">
+
+
+        <h3 class="text-sm font-bold text-white flex items-center gap-2 mb-4">
+            <svg class="w-5 h-5 text-neon-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Model Settings
+        </h3>
+
+        <div class="space-y-4">
+            <!-- 1M Context Toggle -->
+            <div class="flex items-center justify-between p-4 bg-space-900/50 rounded-lg border border-space-border">
+                <div>
+                    <h4 class="text-sm font-medium text-white">Gemini 1M Context Mode</h4>
+                    <p class="text-xs text-gray-500 mt-1">Enable 1 million token context window for all Gemini
+                        models
+                    </p>
+                    <p class="text-[10px] text-yellow-500 mt-1 flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Large context may reduce performance
+                    </p>
+                </div>
+                <input type="checkbox" x-model="settings.enable1MContext" @change="saveSettings()"
+                    class="toggle toggle-success">
+            </div>
+
+
+
+            <!-- Regenerate API Key -->
+            <div class="p-4 bg-space-900/50 rounded-lg border border-space-border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="text-sm font-medium text-white">API Key</h4>
+                        <p class="text-xs text-gray-500 mt-1">Regenerate if compromised</p>
+                    </div>
+                    <button @click="regenerateApiKey()"
+                        class="btn btn-sm btn-ghost border border-space-border hover:bg-white/5 text-gray-300">
+                        Regenerate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Display -->
+    <div x-show="error" class="mt-4 p-3 bg-red-900/30 border border-red-500/30 rounded-lg">
+        <p class="text-red-400 text-sm" x-text="error"></p>
+    </div>
+</div>
+</div>

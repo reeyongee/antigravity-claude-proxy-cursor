@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Cursor Antigravity Proxy</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="/css/style.css" rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /* Custom animations for setup specific elements */
+        .step-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+
+<body class="bg-space-950 text-gray-300 font-sans min-h-screen flex flex-col">
+
+    <div x-data="setupWizard()" x-init="init()" class="flex-grow flex items-center justify-center p-4 sm:p-6">
+
+        <div class="w-full max-w-lg mx-auto space-y-8">
+
+            <!-- Header Logo -->
+            <div class="text-center space-y-4">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-neon-purple/20 to-blue-600/20 mb-4">
+                    <img src="favicon.svg" class="w-10 h-10" alt="Rocket">
+                </div>
+                <h1 class="text-3xl font-bold text-white tracking-tight">Cursor Antigravity Proxy</h1>
+                <p class="text-gray-400">Complete setup in just a few steps</p>
+            </div>
+
+            <!-- Main Card -->
+            <div class="view-card shadow-2xl shadow-black/50 border-space-border/50 bg-space-900/40 backdrop-blur-xl">
+
+                <!-- Stepper -->
+                <div class="px-8 pt-8 pb-6">
+                    <div class="flex items-center justify-between relative">
+                        <!-- Progress Bar Background -->
+                        <div
+                            class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-space-800 rounded-full -z-10">
+                        </div>
+
+                        <!-- Progress Bar Fill -->
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-neon-purple to-blue-500 rounded-full -z-10 transition-all duration-500"
+                            :style="`width: ${(currentStep / (steps.length - 1)) * 100}%`"></div>
+
+                        <template x-for="(step, index) in steps" :key="index">
+                            <div class="flex flex-col items-center gap-2 bg-space-900/80 px-2 rounded-full z-10">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300"
+                                    :class="{
+                                        'bg-neon-purple border-neon-purple text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]': currentStep === index,
+                                        'bg-space-900 border-neon-purple text-neon-purple': index < currentStep,
+                                        'bg-space-800 border-space-700 text-gray-500': index > currentStep
+                                     }">
+                                    <span x-show="index < currentStep">✓</span>
+                                    <span x-show="index >= currentStep" x-text="index + 1"></span>
+                                </div>
+                                <span
+                                    class="text-[10px] font-medium uppercase tracking-wider transition-colors duration-300"
+                                    :class="currentStep >= index ? 'text-gray-300' : 'text-gray-600'"
+                                    x-text="step"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="p-8 pt-2 min-h-[400px] flex flex-col">
+
+                    <!-- Step 1: ngrok -->
+                    <div x-show="currentStep === 0" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 translate-x-4"
+                        x-transition:enter-end="opacity-100 translate-x-0" class="flex-grow flex flex-col space-y-6">
+
+                        <div class="text-center space-y-2">
+                            <h2 class="text-xl font-semibold text-white">Configure Remote Access</h2>
+                            <p class="text-sm text-gray-400">Set up a secure tunnel for Cursor to connect to.</p>
+                        </div>
+
+                        <!-- Check Status -->
+                        <div x-show="!status.ngrokInstalled" class="flex-grow flex flex-col justify-center space-y-4">
+                            <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 flex gap-3">
+                                <span class="text-2xl flex items-start pt-1">
+                                    <svg class="w-6 h-6 text-yellow-500" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h3 class="text-yellow-400 font-medium">ngrok Not Found</h3>
+                                    <p class="text-sm text-yellow-500/80 mt-1">Please install ngrok to continue.</p>
+                                </div>
+                            </div>
+
+                            <div
+                                class="bg-space-950 rounded-lg border border-space-border p-3 font-mono text-sm text-green-400 flex items-center justify-between group">
+                                <span>brew install ngrok</span>
+                                <button
+                                    class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-white"
+                                    @click="navigator.clipboard.writeText('brew install ngrok')">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-12a2 2 0 00-2-2h-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <button @click="checkStatus()"
+                                class="btn w-full bg-space-800 border-space-border hover:bg-space-700 hover:border-gray-600 text-white">
+                                Check Again
+                            </button>
+                        </div>
+
+                        <!-- Config Form -->
+                        <div x-show="status.ngrokInstalled && !status.ngrokConfigured"
+                            class="flex-grow flex flex-col justify-center space-y-6">
+                            <div class="space-y-4">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text text-gray-300">Auth Token</span>
+                                        <a href="https://dashboard.ngrok.com/get-started/your-authtoken" target="_blank"
+                                            class="text-xs text-neon-purple hover:text-neon-purple-soft hover:underline">Get
+                                            token →</a>
+                                    </label>
+                                    <input type="password" x-model="ngrokToken"
+                                        placeholder="Enter your ngrok auth token..."
+                                        class="input w-full bg-space-950 border-space-border focus:border-neon-purple transition-colors text-white placeholder-gray-600">
+                                </div>
+                            </div>
+
+                            <button @click="configureNgrok()" :disabled="!ngrokToken || loading"
+                                class="btn w-full bg-neon-purple hover:bg-neon-purple-soft text-white border-none shadow-lg shadow-neon-purple/20 disabled:bg-space-800 disabled:text-gray-500">
+                                <span x-show="loading" class="loading loading-spinner loading-sm"></span>
+                                <span x-show="!loading">Connect Tunnel</span>
+                            </button>
+                        </div>
+
+                        <!-- Success State -->
+                        <div x-show="status.ngrokConfigured"
+                            class="flex-grow flex flex-col items-center justify-center text-center space-y-6">
+                            <div
+                                class="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 text-2xl border border-green-500/20">
+                                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-white">Tunnel Configured</h3>
+                                <p class="text-sm text-gray-400 mt-1">Ready to create secure connection.</p>
+                            </div>
+                            <button @click="nextStep()"
+                                class="btn w-full bg-green-600 hover:bg-green-700 text-white border-none">
+                                Continue
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Account -->
+                    <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 translate-x-4"
+                        x-transition:enter-end="opacity-100 translate-x-0" class="flex-grow flex flex-col space-y-6">
+
+                        <div class="text-center space-y-2">
+                            <h2 class="text-xl font-semibold text-white">Connect Account</h2>
+                            <p class="text-sm text-gray-400">Link your Google account to access AI models.</p>
+                        </div>
+
+                        <div x-show="!status.hasAccounts"
+                            class="flex-grow flex flex-col items-center justify-center space-y-8">
+                            <button @click="addAccount()" :disabled="loading"
+                                class="btn w-full bg-white text-black hover:bg-gray-200 border-none flex items-center justify-center gap-3 h-14 text-lg font-medium shadow-lg shadow-white/10 transition-all hover:scale-[1.02]">
+                                <svg x-show="!loading" class="w-6 h-6" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                    <path fill="currentColor"
+                                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                    <path fill="currentColor"
+                                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                    <path fill="currentColor"
+                                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                </svg>
+                                <span x-show="loading" class="loading loading-spinner loading-md"></span>
+                                <span x-show="!loading">Sign in with Google</span>
+                            </button>
+
+                            <p class="text-xs text-gray-500">Opens in a new window to sync your Gemini models</p>
+                        </div>
+
+                        <div x-show="status.hasAccounts"
+                            class="flex-grow flex flex-col items-center justify-center text-center space-y-6">
+                            <div
+                                class="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 text-2xl border border-green-500/20">
+                                <span x-text="status.accountCount"></span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-white">Accounts Connected</h3>
+                                <p class="text-sm text-gray-400 mt-1">Your AI models are ready to use.</p>
+                            </div>
+                            <button @click="nextStep()"
+                                class="btn w-full bg-green-600 hover:bg-green-700 text-white border-none">
+                                Continue
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Complete -->
+                    <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 translate-x-4"
+                        x-transition:enter-end="opacity-100 translate-x-0" class="flex-grow flex flex-col space-y-6">
+
+                        <div class="text-center space-y-2">
+                            <h2 class="text-xl font-semibold text-white">Setup Complete!</h2>
+                            <p class="text-sm text-gray-400">Copy these credentials to Cursor.</p>
+                        </div>
+
+                        <!-- Dashboard-style Card -->
+                        <div
+                            class="bg-gradient-to-br from-indigo-900/20 to-purple-900/20 border border-indigo-500/30 rounded-xl p-6 shadow-xl">
+                            <!-- Header with Copy All -->
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-neon-purple" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    Your Cursor Settings
+                                </h3>
+                                <button @click="copyAllSettings()"
+                                    class="btn btn-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 border-0 text-white gap-2 shadow-lg shadow-purple-500/20">
+                                    <span x-show="copied !== 'all'" class="flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-12a2 2 0 00-2-2h-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                        Copy All Settings
+                                    </span>
+                                    <span x-show="copied === 'all'" class="flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Copied!
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- Grid -->
+                            <div class="grid grid-cols-1 gap-4">
+                                <!-- API Key -->
+                                <div
+                                    class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Proxy Access
+                                            Token</div>
+                                        <div class="text-sm font-mono text-green-400 truncate"
+                                            x-text="cursorConfig.apiKey"></div>
+                                        <div class="text-[9px] text-gray-600 mt-0.5">Enter this key in Cursor</div>
+                                    </div>
+                                    <button @click="copyToClipboard(cursorConfig.apiKey, 'apiKey')"
+                                        class="p-2 rounded-lg transition-all duration-200"
+                                        :class="copied === 'apiKey' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
+                                        <span x-show="copied !== 'apiKey'">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                        <span x-show="copied === 'apiKey'">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <!-- Base URL -->
+                                <div
+                                    class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Base URL</div>
+                                        <div class="text-sm font-mono text-blue-400 truncate"
+                                            x-text="cursorConfig.baseUrl"></div>
+                                        <div class="text-[9px] text-gray-600 mt-0.5">Use this URL in Cursor settings
+                                        </div>
+                                    </div>
+                                    <button @click="copyToClipboard(cursorConfig.baseUrl, 'baseUrl')"
+                                        class="p-2 rounded-lg transition-all duration-200"
+                                        :class="copied === 'baseUrl' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
+                                        <span x-show="copied !== 'baseUrl'">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                        <span x-show="copied === 'baseUrl'">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <!-- Model -->
+                                <div
+                                    class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Model</div>
+                                        <div class="text-sm font-mono text-yellow-400 truncate"
+                                            x-text="cursorConfig.model"></div>
+                                        <div class="text-[9px] text-gray-600 mt-0.5">Example model to test with</div>
+                                    </div>
+                                    <button @click="copyToClipboard(cursorConfig.model, 'model')"
+                                        class="p-2 rounded-lg transition-all duration-200"
+                                        :class="copied === 'model' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
+                                        <span x-show="copied !== 'model'">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                        <span x-show="copied === 'model'">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <a href="/"
+                                class="btn w-full bg-space-800 hover:bg-space-700 text-white border-space-border hover:border-gray-500 transition-all flex items-center justify-center gap-2 group">
+                                <span>Go to Dashboard</span>
+                                <span class="group-hover:translate-x-1 transition-transform">→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center text-xs text-gray-500">
+                <p>Need help? Visit the <a href="#" class="text-gray-400 hover:text-white underline">documentation</a>
+                </p>
+            </div>
+
+            <!-- Error Toast -->
+            <div x-show="error" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+                class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-lg shadow-xl backdrop-blur-md flex items-center gap-3 z-50">
+                <span>
+                    <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </span>
+                <span x-text="error"></span>
+                <button @click="error = null" class="opacity-50 hover:opacity-100 ml-2">×</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Keep original script logic exactly as is -->
+    <script>
+        function setupWizard() {
+            return {
+                steps: ['ngrok', 'Account', 'Complete'],
+                currentStep: 0,
+                loading: false,
+                error: null,
+                copied: null,
+                ngrokToken: '',
+                status: {
+                    ngrokInstalled: false,
+                    ngrokConfigured: false,
+                    ngrokRunning: false,
+                    hasAccounts: false,
+                    accountCount: 0
+                },
+                cursorConfig: {
+                    apiKey: '',
+                    baseUrl: '',
+                    model: 'gemini-3-pro-high'
+                },
+
+                async init() {
+                    // Slight delay to allow animations to play
+                    setTimeout(async () => {
+                        await this.checkStatus();
+                        await this.loadCursorConfig();
+
+                        // Auto-advance based on status
+                        if (this.status.ngrokConfigured && this.status.ngrokRunning) {
+                            if (this.status.hasAccounts) {
+                                this.currentStep = 2;
+                            } else {
+                                this.currentStep = 1;
+                            }
+                        }
+                    }, 500);
+                },
+
+                async checkStatus() {
+                    try {
+                        const resp = await fetch('/api/setup/status');
+                        const data = await resp.json();
+                        if (data.status === 'ok') {
+                            this.status = data.setup.steps;
+                        }
+                    } catch (e) {
+                        console.error('Failed to check status:', e);
+                    }
+                },
+
+                async loadCursorConfig() {
+                    try {
+                        const resp = await fetch('/api/cursor/config');
+                        const data = await resp.json();
+                        if (data.status === 'ok') {
+                            this.cursorConfig = data.cursor;
+                        }
+                    } catch (e) {
+                        console.error('Failed to load cursor config:', e);
+                    }
+                },
+
+                async configureNgrok() {
+                    if (!this.ngrokToken) return;
+
+                    this.loading = true;
+                    this.error = null;
+
+                    try {
+                        const resp = await fetch('/api/setup/ngrok', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ authToken: this.ngrokToken })
+                        });
+                        const data = await resp.json();
+
+                        if (data.status === 'ok') {
+                            await this.checkStatus();
+                            await this.loadCursorConfig();
+                            this.nextStep();
+                        } else {
+                            this.error = data.error || 'Failed to configure ngrok';
+                        }
+                    } catch (e) {
+                        this.error = 'Network error: ' + e.message;
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                async addAccount() {
+                    this.loading = true;
+                    this.error = null;
+
+                    try {
+                        const resp = await fetch('/api/auth/url');
+                        const data = await resp.json();
+
+                        if (data.status === 'ok' && data.url) {
+                            window.open(data.url, '_blank');
+
+                            // Poll for account addition
+                            let attempts = 0;
+                            const poll = setInterval(async () => {
+                                attempts++;
+                                await this.checkStatus();
+
+                                if (this.status.hasAccounts) {
+                                    clearInterval(poll);
+                                    this.loading = false;
+                                    this.nextStep();
+                                } else if (attempts > 60) { // 2 min timeout
+                                    clearInterval(poll);
+                                    this.loading = false;
+                                    this.error = 'Timeout waiting for account. Please try again.';
+                                }
+                            }, 2000);
+                        } else {
+                            this.error = data.error || 'Failed to get auth URL';
+                            this.loading = false;
+                        }
+                    } catch (e) {
+                        this.error = 'Network error: ' + e.message;
+                        this.loading = false;
+                    }
+                },
+
+                nextStep() {
+                    if (this.currentStep < this.steps.length - 1) {
+                        this.currentStep++;
+                    }
+                },
+
+                async copyToClipboard(text, field) {
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        this.copied = field;
+                        setTimeout(() => this.copied = null, 2000);
+                    } catch (e) {
+                        console.error('Failed to copy:', e);
+                    }
+                },
+
+                async copyAllSettings() {
+                    const settings = `API Key: ${this.cursorConfig.apiKey}
+Base URL: ${this.cursorConfig.baseUrl}
+Model: ${this.cursorConfig.model}`;
+                    await this.copyToClipboard(settings, 'all');
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

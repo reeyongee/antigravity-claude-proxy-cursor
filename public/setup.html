@@ -16,7 +16,7 @@
     </style>
 </head>
 
-<body class="bg-space-950 text-gray-300 font-sans min-h-screen flex flex-col">
+<body class="bg-space-950 text-white font-sans min-h-screen flex flex-col">
 
     <div x-data="setupWizard()" x-init="init()" class="flex-grow flex items-center justify-center p-4 sm:p-6">
 
@@ -29,7 +29,7 @@
                     <img src="favicon.svg" class="w-10 h-10" alt="Rocket">
                 </div>
                 <h1 class="text-3xl font-bold text-white tracking-tight">Cursor Antigravity Proxy</h1>
-                <p class="text-gray-400">Complete setup in just a few steps</p>
+                <p class="text-white">Complete setup in just a few steps</p>
             </div>
 
             <!-- Main Card -->
@@ -53,14 +53,14 @@
                                     :class="{
                                         'bg-neon-purple border-neon-purple text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]': currentStep === index,
                                         'bg-space-900 border-neon-purple text-neon-purple': index < currentStep,
-                                        'bg-space-800 border-space-700 text-gray-500': index > currentStep
+                                        'bg-space-800 border-space-700 text-white': index > currentStep
                                      }">
                                     <span x-show="index < currentStep">✓</span>
                                     <span x-show="index >= currentStep" x-text="index + 1"></span>
                                 </div>
                                 <span
                                     class="text-[10px] font-medium uppercase tracking-wider transition-colors duration-300"
-                                    :class="currentStep >= index ? 'text-gray-300' : 'text-gray-600'"
+                                    :class="currentStep >= index ? 'text-white' : 'text-white'"
                                     x-text="step"></span>
                             </div>
                         </template>
@@ -77,7 +77,7 @@
 
                         <div class="text-center space-y-2">
                             <h2 class="text-xl font-semibold text-white">Configure Remote Access</h2>
-                            <p class="text-sm text-gray-400">Set up a secure tunnel for Cursor to connect to.</p>
+                            <p class="text-sm text-white">Set up a secure tunnel for Cursor to connect to.</p>
                         </div>
 
                         <!-- Check Status -->
@@ -100,7 +100,7 @@
                                 class="bg-space-950 rounded-lg border border-space-border p-3 font-mono text-sm text-green-400 flex items-center justify-between group">
                                 <span>brew install ngrok</span>
                                 <button
-                                    class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-white"
+                                    class="opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-white"
                                     @click="navigator.clipboard.writeText('brew install ngrok')">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -121,7 +121,7 @@
                             <div class="space-y-4">
                                 <div class="form-control">
                                     <label class="label">
-                                        <span class="label-text text-gray-300">Auth Token</span>
+                                        <span class="label-text text-white">Auth Token</span>
                                         <a href="https://dashboard.ngrok.com/get-started/your-authtoken" target="_blank"
                                             class="text-xs text-neon-purple hover:text-neon-purple-soft hover:underline">Get
                                             token →</a>
@@ -133,7 +133,7 @@
                             </div>
 
                             <button @click="configureNgrok()" :disabled="!ngrokToken || loading"
-                                class="btn w-full bg-neon-purple hover:bg-neon-purple-soft text-white border-none shadow-lg shadow-neon-purple/20 disabled:bg-space-800 disabled:text-gray-500">
+                                class="btn w-full bg-neon-purple hover:bg-neon-purple-soft text-white border-none shadow-lg shadow-neon-purple/20 disabled:bg-space-800 disabled:text-white">
                                 <span x-show="loading" class="loading loading-spinner loading-sm"></span>
                                 <span x-show="!loading">Connect Tunnel</span>
                             </button>
@@ -151,7 +151,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-medium text-white">Tunnel Configured</h3>
-                                <p class="text-sm text-gray-400 mt-1">Ready to create secure connection.</p>
+                                <p class="text-sm text-white mt-1">Ready to create secure connection.</p>
                             </div>
                             <button @click="nextStep()"
                                 class="btn w-full bg-green-600 hover:bg-green-700 text-white border-none">
@@ -167,7 +167,7 @@
 
                         <div class="text-center space-y-2">
                             <h2 class="text-xl font-semibold text-white">Connect Account</h2>
-                            <p class="text-sm text-gray-400">Link your Google account to access AI models.</p>
+                            <p class="text-sm text-white">Link your Google account to access AI models.</p>
                         </div>
 
                         <div x-show="!status.hasAccounts"
@@ -188,7 +188,7 @@
                                 <span x-show="!loading">Sign in with Google</span>
                             </button>
 
-                            <p class="text-xs text-gray-500">Opens in a new window to sync your Gemini models</p>
+                            <p class="text-xs text-white">Opens in a new window to sync your Gemini models</p>
                         </div>
 
                         <div x-show="status.hasAccounts"
@@ -199,7 +199,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-medium text-white">Accounts Connected</h3>
-                                <p class="text-sm text-gray-400 mt-1">Your AI models are ready to use.</p>
+                                <p class="text-sm text-white mt-1">Your AI models are ready to use.</p>
                             </div>
                             <button @click="nextStep()"
                                 class="btn w-full bg-green-600 hover:bg-green-700 text-white border-none">
@@ -215,7 +215,7 @@
 
                         <div class="text-center space-y-2">
                             <h2 class="text-xl font-semibold text-white">Setup Complete!</h2>
-                            <p class="text-sm text-gray-400">Copy these credentials to Cursor.</p>
+                            <p class="text-sm text-white">Copy these credentials to Cursor.</p>
                         </div>
 
                         <!-- Dashboard-style Card -->
@@ -256,11 +256,11 @@
                                 <div
                                     class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
                                     <div class="min-w-0 flex-1">
-                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Proxy Access
+                                        <div class="text-[10px] font-mono text-white uppercase mb-1">Proxy Access
                                             Token</div>
                                         <div class="text-sm font-mono text-green-400 truncate"
                                             x-text="cursorConfig.apiKey"></div>
-                                        <div class="text-[9px] text-gray-600 mt-0.5">Enter this key in Cursor</div>
+                                        <div class="text-[9px] text-white mt-0.5">Enter this key in Cursor</div>
                                     </div>
                                     <button @click="copyToClipboard(cursorConfig.apiKey, 'apiKey')"
                                         class="p-2 rounded-lg transition-all duration-200"
@@ -285,10 +285,10 @@
                                 <div
                                     class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
                                     <div class="min-w-0 flex-1">
-                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Base URL</div>
+                                        <div class="text-[10px] font-mono text-white uppercase mb-1">Base URL</div>
                                         <div class="text-sm font-mono text-blue-400 truncate"
                                             x-text="cursorConfig.baseUrl"></div>
-                                        <div class="text-[9px] text-gray-600 mt-0.5">Use this URL in Cursor settings
+                                        <div class="text-[9px] text-white mt-0.5">Use this URL in Cursor settings
                                         </div>
                                     </div>
                                     <button @click="copyToClipboard(cursorConfig.baseUrl, 'baseUrl')"
@@ -314,10 +314,10 @@
                                 <div
                                     class="bg-space-900/50 rounded-lg px-4 py-3 border border-space-border/30 flex items-center justify-between group hover:border-indigo-500/30 transition-colors">
                                     <div class="min-w-0 flex-1">
-                                        <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Model</div>
+                                        <div class="text-[10px] font-mono text-white uppercase mb-1">Model</div>
                                         <div class="text-sm font-mono text-yellow-400 truncate"
                                             x-text="cursorConfig.model"></div>
-                                        <div class="text-[9px] text-gray-600 mt-0.5">Example model to test with</div>
+                                        <div class="text-[9px] text-white mt-0.5">Example model to test with</div>
                                     </div>
                                     <button @click="copyToClipboard(cursorConfig.model, 'model')"
                                         class="p-2 rounded-lg transition-all duration-200"
@@ -353,8 +353,8 @@
             </div>
 
             <!-- Footer -->
-            <div class="text-center text-xs text-gray-500">
-                <p>Need help? Visit the <a href="#" class="text-gray-400 hover:text-white underline">documentation</a>
+            <div class="text-center text-xs text-white">
+                <p>Need help? Visit the <a href="#" class="text-white hover:text-white underline">documentation</a>
                 </p>
             </div>
 

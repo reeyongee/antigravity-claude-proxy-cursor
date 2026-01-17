@@ -10,7 +10,7 @@
                 <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
                 <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
             </div>
-            <span class="text-xs font-mono text-gray-500 hidden sm:inline-block">~/logs</span>
+            <span class="text-xs font-mono text-white hidden sm:inline-block">~/logs</span>
         </div>
 
         <!-- Center: Search & Filters -->
@@ -18,12 +18,12 @@
             <!-- Search -->
             <div class="relative w-full max-w-xs group">
                 <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
-                    <svg class="h-3 w-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
                 <input type="text" x-model="searchQuery" :placeholder="$store.global.t('grepLogs')"
-                    class="w-full h-7 bg-space-950 border border-space-border rounded text-xs font-mono pl-7 pr-2 focus:border-neon-purple focus:outline-none transition-colors placeholder-gray-700 text-gray-300">
+                    class="w-full h-7 bg-space-950 border border-space-border rounded text-xs font-mono pl-7 pr-2 focus:border-neon-purple focus:outline-none transition-colors placeholder-gray-700 text-white">
             </div>
 
             <!-- Filters -->
@@ -45,11 +45,11 @@
 
         <!-- Right: Controls -->
         <div class="flex items-center gap-4 shrink-0">
-            <div class="text-[10px] font-mono text-gray-600 hidden lg:block">
+            <div class="text-[10px] font-mono text-white hidden lg:block">
                 <span x-text="filteredLogs.length"></span>/<span x-text="logs.length"></span>
             </div>
             <label class="cursor-pointer flex items-center gap-2">
-                <span class="text-[10px] font-mono text-gray-500 uppercase hidden sm:inline-block"
+                <span class="text-[10px] font-mono text-white uppercase hidden sm:inline-block"
                     x-text="$store.global.t('autoScroll')">Auto-Scroll</span>
                 <input type="checkbox" class="toggle toggle-xs toggle-success" x-model="isAutoScroll">
             </label>

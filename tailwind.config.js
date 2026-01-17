@@ -12,11 +12,11 @@ export default {
       },
       colors: {
         space: {
-          950: '#09090b',
-          900: '#0f0f11',
-          850: '#121214',
-          800: '#18181b',
-          border: '#27272a'
+          950: '#2d3047', // Space Indigo (Base)
+          900: '#588b8b', // Dark Cyan
+          850: '#93b7be', // Light Blue
+          800: '#1e2030', // Deep Indigo
+          border: '#93b7be'
         },
         neon: {
           purple: '#a855f7',
@@ -24,6 +24,15 @@ export default {
           green: '#22c55e',
           yellow: '#eab308',
           red: '#ef4444'
+        },
+        custom: {
+          'dark-cyan': '#588b8bff',
+          'white': '#ffffffff',
+          'peach-fuzz': '#ffd5c2ff',
+          'tiger-orange': '#f28f3bff',
+          'rosy-copper': '#c8553dff',
+          'space-indigo': '#2d3047ff',
+          'light-blue': '#93b7beff',
         }
       }
     }
@@ -35,15 +44,17 @@ export default {
   daisyui: {
     themes: [{
       antigravity: {
-        "primary": "#a855f7",    // neon-purple
-        "secondary": "#22c55e",  // neon-green
-        "accent": "#06b6d4",     // neon-cyan
-        "neutral": "#18181b",    // space-800
-        "base-100": "#09090b",   // space-950
-        "info": "#06b6d4",       // neon-cyan
-        "success": "#22c55e",    // neon-green
-        "warning": "#eab308",    // neon-yellow
-        "error": "#ef4444",      // neon-red
+        "primary": "#f28f3b",    // tiger-orange
+        "secondary": "#93b7be",  // light-blue
+        "accent": "#c8553d",     // rosy-copper
+        "neutral": "#2d3047",    // space-indigo
+        "base-100": "#2d3047",   // space-indigo (Main BG)
+        "base-200": "#588b8b",   // dark-cyan (Secondary BG)
+        "base-content": "#ffffff", // white
+        "info": "#93b7be",       // light-blue
+        "success": "#588b8b",    // dark-cyan (using palette)
+        "warning": "#ffd5c2",    // peach-fuzz
+        "error": "#c8553d",      // rosy-copper
       }
     }],
     logs: false  // Disable console logs in production

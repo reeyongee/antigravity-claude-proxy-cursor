@@ -42,7 +42,7 @@ Please provide ONE of the following:
 
 **Checklist**
 Please confirm:
-- [ ] I've updated antigravity-claude-proxy to the latest version
+- [ ] I've updated antigravity-claude-proxy-cursor to the latest version
 - [ ] The bug exists in the latest version
 - [ ] I'm using this proxy for personal development only
 - [ ] I have an active Google Cloud project with Antigravity enabled

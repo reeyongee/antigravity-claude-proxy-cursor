@@ -2,20 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: var(--color-space-950) !important;
+}
+
 :root {
   /* === Background Layers === */
-  --color-space-950: #09090b;
-  --color-space-900: #0f0f11;
-  --color-space-850: #121214;
-  --color-space-800: #18181b;
-  --color-space-border: #27272a;
+  --color-space-950: #2d3047;
+  /* Space Indigo (Base Background) */
+  --color-space-900: #3b3e59;
+  /* Lighter Indigo for depth */
+  --color-space-850: #588b8b;
+  /* Dark Cyan (Lighter Panels) */
+  --color-space-800: #93b7be;
+  /* Light Blue */
+  --color-space-border: #93b7be;
+  /* Light Blue (Borders) */
 
-  /* === Neon Accents (Full Saturation) === */
-  --color-neon-purple: #a855f7;
-  --color-neon-green: #22c55e;
-  --color-neon-cyan: #06b6d4;
-  --color-neon-yellow: #eab308;
-  --color-neon-red: #ef4444;
+  /* === New Palette Integration === */
+  --color-space-indigo: #2d3047;
+  --color-dark-cyan: #588b8b;
+  --color-tiger-orange: #f28f3b;
+  --color-rosy-copper: #c8553d;
+  --color-light-blue: #93b7be;
+  --color-peach-fuzz: #ffd5c2;
+
+  /* === Neon Accents (Mapped to New Palette) === */
+  --color-neon-purple: var(--color-tiger-orange);
+  /* Using Tiger Orange as Primary */
+  --color-neon-green: var(--color-dark-cyan);
+  /* Using Dark Cyan as Success */
+  --color-neon-cyan: var(--color-light-blue);
+  /* Using Light Blue as Info */
+  --color-neon-yellow: var(--color-peach-fuzz);
+  /* Peach Fuzz as Warning */
+  --color-neon-red: var(--color-rosy-copper);
+  /* Rosy Copper as Error */
 
   /* === Soft Neon (Reduced Saturation for Fills) === */
   --color-neon-purple-soft: #9333ea;
@@ -23,10 +45,15 @@
   --color-neon-cyan-soft: #0891b2;
 
   /* === Text Hierarchy (WCAG AA Compliant) === */
-  --color-text-primary: #ffffff; /* Emphasis: Titles, Key Numbers */
-  --color-text-secondary: #d4d4d8; /* Content: Body Text (zinc-300) */
-  --color-text-tertiary: #a1a1aa; /* Metadata: Timestamps, Labels (zinc-400) */
-  --color-text-quaternary: #71717a; /* Subtle: Decorative (zinc-500) */
+  /* === Text Hierarchy (WCAG AA Compliant) === */
+  --color-text-primary: #ffffff;
+  /* White (TITLES) */
+  --color-text-secondary: #ffffff;
+  /* White (Subtitles/Body) */
+  --color-text-tertiary: #ffffff;
+  /* White (Metadata) */
+  --color-text-quaternary: #ffffff;
+  /* White (Subtle) */
 
   /* === Legacy Aliases (Backward Compatibility) === */
   --color-text-main: var(--color-text-secondary);
@@ -105,6 +132,7 @@
     opacity: 0;
     transform: translateY(5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -115,43 +143,76 @@
   animation: fadeIn 0.4s ease-out forwards;
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px -5px var(--color-tiger-orange);
+  }
+
+  50% {
+    box-shadow: 0 0 25px 0px var(--color-tiger-orange);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
 /* Note: .glass-panel has been deprecated. Use .view-card instead for consistency. */
 
 .nav-item.active {
-  background: linear-gradient(
-    90deg,
-    theme("colors.neon.purple / 15%") 0%,
-    transparent 100%
-  );
-  @apply border-l-4 border-neon-purple text-white;
+  background: linear-gradient(90deg,
+      rgba(242, 143, 59, 0.2) 0%,
+      /* Tiger Orange Tint */
+      transparent 100%);
+  @apply border-l-4 border-custom-tiger-orange text-white;
 }
 
 .nav-item {
-  @apply border-l-4 border-transparent transition-all duration-200;
+  @apply border-l-4 border-transparent transition-all duration-200 text-gray-400 hover:text-custom-peach-fuzz;
 }
 
 .progress-gradient-success::-webkit-progress-value {
-  background-image: linear-gradient(
-    to right,
-    var(--color-neon-green),
-    var(--color-green-400)
-  );
+  background-image: linear-gradient(to right,
+      var(--color-neon-green),
+      var(--color-green-400));
 }
 
 .progress-gradient-warning::-webkit-progress-value {
-  background-image: linear-gradient(
-    to right,
-    var(--color-neon-yellow),
-    var(--color-yellow-400)
-  );
+  background-image: linear-gradient(to right,
+      var(--color-neon-yellow),
+      var(--color-yellow-400));
 }
 
 .progress-gradient-error::-webkit-progress-value {
-  background-image: linear-gradient(
-    to right,
-    var(--color-neon-red),
-    var(--color-red-400)
-  );
+  background-image: linear-gradient(to right,
+      var(--color-neon-red),
+      var(--color-red-400));
 }
 
 /* Dashboard Grid */
@@ -176,9 +237,12 @@
 
 /* Standard Layout Constants */
 :root {
-  --view-padding: 2rem; /* 32px - Standard Padding */
-  --view-gap: 2rem; /* 32px - Standard component gap */
-  --card-radius: 0.75rem; /* 12px */
+  --view-padding: 2.5rem;
+  /* Increased padding */
+  --view-gap: 2.5rem;
+  /* Increased gap */
+  --card-radius: 1.25rem;
+  /* Increased radius (20px) */
 }
 
 @media (max-width: 768px) {
@@ -190,16 +254,17 @@
 
 /* Base View Container */
 .view-container {
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    padding: var(--view-padding);
-    gap: var(--view-gap);
-    min-height: calc(100vh - 56px); /* Align with navbar height */
-    max-width: 1400px;
-    scrollbar-gutter: stable;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding: var(--view-padding);
+  gap: var(--view-gap);
+  min-height: calc(100vh - 56px);
+  /* Align with navbar height */
+  max-width: 1400px;
+  scrollbar-gutter: stable;
 }
 
 /* Specialized container for data-heavy pages (Logs) */
@@ -217,23 +282,24 @@
   padding: var(--view-padding);
   gap: var(--view-gap);
   min-height: calc(100vh - 56px);
-  max-width: 900px; /* Comfortable reading width for forms */
+  max-width: 900px;
+  /* Comfortable reading width for forms */
 }
 
 /* Standard Section Header */
 .view-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
 }
 
 @media (min-width: 768px) {
-    .view-header {
-        flex-direction: row;
-        align-items: flex-end;
-    }
+  .view-header {
+    flex-direction: row;
+    align-items: flex-end;
+  }
 }
 
 .view-header-title {
@@ -254,52 +320,57 @@
 
 /* Standard Card Panel */
 .view-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--card-radius);
-    padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(135deg,
-        rgba(15, 15, 17, 0.75) 0%,
-        rgba(18, 18, 20, 0.70) 100%
-    );
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.02) inset,
-        0 4px 24px rgba(0, 0, 0, 0.4);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  border: 1px solid var(--color-light-blue);
+  /* Light Blue Border */
+  background: linear-gradient(135deg,
+      rgba(88, 139, 139, 0.4) 0%,
+      /* More opaque Dark Cyan */
+      rgba(147, 183, 190, 0.1) 100%);
+  /* Light Blue hint */
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 0 0 1px rgba(147, 183, 190, 0.1) inset,
+    /* Light Blue Inner Glow */
+    0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .view-card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-        0 8px 32px rgba(0, 0, 0, 0.5);
+  border-color: var(--color-tiger-orange);
+  /* Tiger Orange Hover */
+  box-shadow:
+    0 0 0 1px rgba(242, 143, 59, 0.2) inset,
+    0 12px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }
 
 .view-card-header {
-  @apply flex items-center justify-between mb-4 pb-4 border-b border-[rgba(39,39,42,0.3)];
+  @apply flex items-center justify-between mb-4 pb-4 border-b border-custom-light-blue/20;
 }
 
 /* Component Unification */
 .standard-table {
   @apply table w-full border-separate border-spacing-0;
 }
+
 .standard-table thead {
   @apply bg-space-900/50 text-gray-500 font-mono text-xs uppercase border-b border-space-border;
 }
+
 .standard-table tbody tr {
-  @apply transition-all duration-200 border-b border-[rgba(39,39,42,0.3)] last:border-0;
+  @apply transition-all duration-200 border-b border-[#27272a4d] last:border-0;
 }
 
 .standard-table tbody tr:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.03) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0.03) 100%);
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
@@ -349,15 +420,19 @@
 .custom-range-purple {
   --range-color: var(--color-neon-purple);
 }
+
 .custom-range-green {
   --range-color: var(--color-neon-green);
 }
+
 .custom-range-cyan {
   --range-color: var(--color-neon-cyan);
 }
+
 .custom-range-yellow {
   --range-color: var(--color-neon-yellow);
 }
+
 .custom-range-accent {
   --range-color: var(--color-neon-cyan);
 }
@@ -370,19 +445,15 @@
 
 /* Filter Controls */
 .filter-control {
-    @apply flex items-center justify-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 
-           text-[10px] lg:text-xs font-mono font-medium text-gray-400 
-           bg-space-800 lg:bg-transparent border border-space-border/50 lg:border-transparent 
-           rounded lg:rounded-md hover:text-white lg:hover:bg-space-800 
-           transition-all duration-200 whitespace-nowrap w-full sm:w-auto;
+  @apply flex items-center justify-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 text-[10px] lg:text-xs font-mono font-medium text-gray-400 bg-space-800 lg:bg-transparent border border-space-border/50 lg:border-transparent rounded lg:rounded-md hover:text-white lg:hover:bg-space-800 transition-all duration-200 whitespace-nowrap w-full sm:w-auto;
 }
 
 .filter-control:hover {
-    @apply border-neon-cyan/50 lg:border-neon-cyan/30 lg:shadow-lg lg:shadow-neon-cyan/10;
+  @apply border-neon-cyan/50 lg:border-neon-cyan/30 lg:shadow-lg lg:shadow-neon-cyan/10;
 }
 
 .filter-control-item {
-    @apply block w-full px-3 py-1.5 text-left text-[10px] font-mono hover:bg-white/5 transition-colors;
+  @apply block w-full px-3 py-1.5 text-left text-[10px] font-mono hover:bg-white/5 transition-colors;
 }
 
 /* Action Buttons */
@@ -395,9 +466,7 @@
 }
 
 .btn-action-primary {
-  @apply btn bg-gradient-to-r from-neon-purple to-indigo-600
-         border-none text-white shadow-lg shadow-neon-purple/20
-         hover:shadow-neon-purple/40 transition-all;
+  @apply btn bg-gradient-to-r from-neon-purple to-indigo-600 border-none text-white shadow-lg shadow-neon-purple/20 hover:shadow-neon-purple/40 transition-all;
 }
 
 .btn-action-success {
@@ -447,11 +516,7 @@
 
 /* Input Components */
 .input-search {
-  @apply w-full bg-space-900/50 border border-[rgba(39,39,42,0.5)] text-gray-300
-         rounded-lg pl-10 pr-4 py-2
-         focus:outline-none focus:bg-space-800 focus:border-neon-purple/50
-         hover:border-space-border hover:bg-space-800/80
-         transition-all placeholder-gray-600/80;
+  @apply w-full bg-space-900/50 border border-[#27272a80] text-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:bg-space-800 focus:border-neon-purple/50 hover:border-space-border hover:bg-space-800/80 transition-all placeholder-gray-600/80;
 }
 
 .input-search-sm {
@@ -464,9 +529,12 @@
 
 /* Skeleton animation */
 @keyframes skeleton-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.4;
   }

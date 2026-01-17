@@ -6,8 +6,8 @@
                 Cursor IDE
             </h1>
             <div
-                class="flex items-center h-6 px-3 rounded-full bg-space-800/80 border border-space-border/50 shadow-sm backdrop-blur-sm">
-                <span class="text-[10px] font-mono text-gray-400 uppercase tracking-wider">
+                class="flex items-center h-6 px-3 rounded-full bg-custom-dark-cyan/20 border border-custom-light-blue/50 shadow-sm backdrop-blur-sm">
+                <span class="text-[10px] font-mono text-white uppercase tracking-wider">
                     CONFIGURATION & SETUP
                 </span>
             </div>
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Your Cursor Settings Card -->
-    <div class="view-card bg-gradient-to-br from-indigo-900/20 to-purple-900/20 border-space-border mb-8">
+    <div class="view-card bg-gradient-to-br from-custom-dark-cyan/10 to-space-indigo/50 border-custom-light-blue mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
                 <svg class="w-5 h-5 text-neon-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,12 +46,12 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
             <!-- Access Token (Proxy API Key) -->
             <div
-                class="flex items-center justify-between bg-space-900/50 rounded-lg px-4 py-3 border border-space-border">
+                class="flex items-center justify-between bg-custom-dark-cyan/10 rounded-lg px-4 py-3 border border-custom-light-blue/30">
                 <div class="min-w-0 flex-1">
-                    <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Proxy Access Token</div>
+                    <div class="text-[10px] font-mono text-white uppercase mb-1">Proxy Access Token</div>
                     <div class="text-sm font-mono text-green-400 truncate"
                         x-text="config.apiKey ? (config.apiKey.substring(0, 24) + '...') : 'Not set'"></div>
-                    <div class="text-[9px] text-gray-600 mt-0.5">Enter this key in Cursor</div>
+                    <div class="text-[9px] text-white/70 mt-0.5">Enter this key in Cursor</div>
                 </div>
                 <button @click="copy(config.apiKey, 'apiKey')" class="p-2 rounded-lg transition-all duration-200"
                     :class="copied === 'apiKey' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
@@ -73,13 +73,13 @@
 
             <!-- Base URL -->
             <div
-                class="flex items-center justify-between bg-space-900/50 rounded-lg px-4 py-3 border border-space-border">
+                class="flex items-center justify-between bg-custom-dark-cyan/10 rounded-lg px-4 py-3 border border-custom-light-blue/30">
                 <div class="min-w-0 flex-1">
-                    <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Base URL</div>
+                    <div class="text-[10px] font-mono text-white uppercase mb-1">Base URL</div>
                     <div class="text-sm font-mono truncate"
                         :class="config.ngrokConnected ? 'text-green-400' : 'text-yellow-400'" x-text="config.baseUrl">
                     </div>
-                    <div class="text-[9px] text-gray-600 mt-0.5">Use this URL in Cursor settings</div>
+                    <div class="text-[9px] text-white/70 mt-0.5">Use this URL in Cursor settings</div>
                 </div>
                 <button @click="copy(config.baseUrl, 'baseUrl')" class="p-2 rounded-lg transition-all duration-200"
                     :class="copied === 'baseUrl' ? 'text-green-400 bg-green-400/10' : 'text-neon-purple hover:bg-neon-purple/10'">
@@ -101,18 +101,18 @@
 
             <!-- Available Models (Dropdown to Copy) -->
             <div
-                class="flex items-center justify-between bg-space-900/50 rounded-lg px-4 py-3 border border-space-border relative overflow-visible">
+                class="flex items-center justify-between bg-custom-dark-cyan/10 rounded-lg px-4 py-3 border border-custom-light-blue/30 relative overflow-visible">
                 <div class="min-w-0 flex-1 relative">
-                    <div class="text-[10px] font-mono text-gray-500 uppercase mb-1">Available Models</div>
+                    <div class="text-[10px] font-mono text-white uppercase mb-1">Available Models</div>
 
                     <div x-data="{ open: false }" class="relative" @click.outside="open = false">
                         <button @click="open = !open"
-                            class="flex items-center gap-2 bg-space-900 border border-space-border/50 text-white text-xs font-mono px-3 py-2 rounded-lg hover:border-indigo-500/50 transition-colors w-full justify-between">
+                            class="flex items-center gap-2 bg-custom-dark-cyan/10 border border-custom-light-blue/30 text-white text-xs font-mono px-3 py-2 rounded-lg hover:border-custom-tiger-orange/50 transition-colors w-full justify-between">
                             <span x-text="settings.availableModels[0] || 'Loading...'"></span>
                             <div class="flex items-center gap-2">
-                                <span class="text-gray-400" x-show="settings.availableModels.length > 1"
+                                <span class="text-white" x-show="settings.availableModels.length > 1"
                                     x-text="'+' + (settings.availableModels.length - 1)"></span>
-                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200"
+                                <svg class="w-4 h-4 text-white transition-transform duration-200"
                                     :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -125,11 +125,11 @@
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                             x-transition:leave="transition ease-in duration-75"
                             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                            class="absolute left-0 top-full mt-2 w-full bg-space-900 border border-space-border rounded-lg shadow-xl z-50 overflow-hidden">
+                            class="absolute left-0 top-full mt-2 w-full bg-space-950 border border-custom-light-blue/50 rounded-lg shadow-xl z-50 overflow-hidden">
                             <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
                                 <template x-for="(modelName, index) in settings.availableModels" :key="index">
                                     <button @click="copy(modelName, 'model'); open = false"
-                                        class="w-full text-left px-3 py-2 rounded hover:bg-space-800 text-xs font-mono text-gray-300 flex items-center justify-between group transition-colors">
+                                        class="w-full text-left px-3 py-2 rounded hover:bg-space-800 text-xs font-mono text-white flex items-center justify-between group transition-colors">
                                         <span x-text="modelName"></span>
                                         <span
                                             class="opacity-0 group-hover:opacity-100 text-[10px] text-indigo-400 uppercase tracking-wider">Copy</span>
@@ -138,61 +138,63 @@
                             </div>
                         </div>
                     </div>
-                    <div class="text-[9px] text-gray-600 mt-0.5">Click to view & copy model IDs</div>
+                    <div class="text-[9px] text-white/70 mt-0.5">Click to view & copy model IDs</div>
                 </div>
             </div>
         </div>
 
         <!-- Quick Setup Guide -->
-        <div class="mt-4 p-5 bg-space-900/30 rounded-lg border border-space-border/20">
+        <div class="mt-4 p-5 bg-custom-dark-cyan/5 rounded-lg border border-custom-light-blue/20">
             <h4
-                class="text-sm font-bold text-gray-400 mb-4 flex items-center gap-2 border-b border-space-border/20 pb-2">
+                class="text-sm font-bold text-white mb-4 flex items-center gap-2 border-b border-custom-light-blue/20 pb-2">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Quick Setup in Cursor
             </h4>
-            <div class="text-sm text-gray-400 space-y-4">
+            <div class="text-sm text-white space-y-4">
                 <div class="flex gap-4">
                     <div
-                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        class="w-6 h-6 rounded-full bg-custom-dark-cyan/20 flex items-center justify-center text-xs border border-custom-light-blue/50 flex-shrink-0 font-mono mt-0.5 text-white">
                         1</div>
                     <div>
-                        <p class="font-medium text-gray-300">Go to Cursor Settings → Models → OpenAI</p>
-                        <p class="text-xs text-gray-500 mt-1">Note: Antigravity acts as an OpenAI-compatible proxy, so
+                        <p class="font-medium text-white">Go to Cursor Settings → Models → OpenAI</p>
+                        <p class="text-xs text-white mt-1">Note: Antigravity acts as an OpenAI-compatible
+                            proxy, so
                             checking the Google or Anthropic tabs will NOT work.</p>
                     </div>
                 </div>
 
                 <div class="flex gap-4">
                     <div
-                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        class="w-6 h-6 rounded-full bg-custom-dark-cyan/20 flex items-center justify-center text-xs border border-custom-light-blue/50 flex-shrink-0 font-mono mt-0.5 text-white">
                         2</div>
                     <div>
-                        <p class="font-medium text-gray-300">Configure API Key</p>
+                        <p class="font-medium text-white">Configure API Key</p>
                         <div
-                            class="mt-1 p-3 bg-black/30 rounded border border-space-border text-xs font-mono text-gray-400">
+                            class="mt-1 p-3 bg-black/30 rounded border border-custom-light-blue/30 text-xs font-mono text-white">
                             Key: <span class="text-green-400"
                                 x-text="config.apiKey ? (config.apiKey.substring(0, 12) + '...') : '...'"></span>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Copy the <strong>Proxy Access Token</strong> from above.
+                        <p class="text-xs text-white mt-1">Copy the <strong>Proxy Access Token</strong> from
+                            above.
                         </p>
                     </div>
                 </div>
 
                 <div class="flex gap-4">
                     <div
-                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        class="w-6 h-6 rounded-full bg-custom-dark-cyan/20 flex items-center justify-center text-xs border border-custom-light-blue/50 flex-shrink-0 font-mono mt-0.5 text-white">
                         3</div>
                     <div>
-                        <p class="font-medium text-gray-300">Enable "Override OpenAI Base URL"</p>
+                        <p class="font-medium text-white">Enable "Override OpenAI Base URL"</p>
                         <div class="mt-1 flex items-center gap-2">
                             <code
-                                class="bg-black/30 px-2 py-1 rounded text-xs font-mono text-green-400 border border-space-border"
+                                class="bg-black/30 px-2 py-1 rounded text-xs font-mono text-green-400 border border-custom-light-blue/30"
                                 x-text="config.baseUrl"></code>
-                            <button @click="copy(config.baseUrl, 'baseUrl')" class="text-gray-500 hover:text-white"
-                                title="Copy URL">
+                            <button @click="copy(config.baseUrl, 'baseUrl')"
+                                class="text-white hover:text-white" title="Copy URL">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
@@ -205,11 +207,12 @@
 
                 <div class="flex gap-4">
                     <div
-                        class="w-6 h-6 rounded-full bg-space-800 flex items-center justify-center text-xs border border-space-border flex-shrink-0 font-mono mt-0.5">
+                        class="w-6 h-6 rounded-full bg-custom-dark-cyan/20 flex items-center justify-center text-xs border border-custom-light-blue/50 flex-shrink-0 font-mono mt-0.5 text-white">
                         4</div>
                     <div>
-                        <p class="font-medium text-gray-300">Add Model Name (Important!)</p>
-                        <p class="text-xs text-gray-500 mt-1">You must manually add the model ID below to Cursor's model
+                        <p class="font-medium text-white">Add Model Name (Important!)</p>
+                        <p class="text-xs text-white mt-1">You must manually add the model ID below to
+                            Cursor's model
                             list:</p>
                         <div class="mt-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                             <div class="flex items-center gap-2 text-yellow-500 font-mono text-xs">
@@ -264,15 +267,16 @@
                         </svg>
                         ngrok is not installed
                     </p>
-                    <p class="text-gray-400 text-xs mt-1">Install with: <code
+                    <p class="text-white text-xs mt-1">Install with: <code
                             class="text-green-400">brew install ngrok</code></p>
                 </div>
 
                 <div x-show="status.ngrokInstalled && !status.ngrokConfigured" class="space-y-3">
                     <div>
-                        <label class="text-xs font-mono text-gray-500 uppercase block mb-1">ngrok Auth Token</label>
+                        <label class="text-xs font-mono text-white uppercase block mb-1">ngrok Auth
+                            Token</label>
                         <input x-model="ngrokToken" type="password" placeholder="Enter your ngrok auth token"
-                            class="input input-bordered w-full bg-space-900 border-space-border focus:border-indigo-500">
+                            class="input input-bordered w-full bg-custom-dark-cyan/5 border-custom-light-blue/30 focus:border-indigo-500 text-white">
                     </div>
                     <a href="https://dashboard.ngrok.com/get-started/your-authtoken" target="_blank"
                         class="text-xs text-indigo-400 hover:underline inline-flex items-center gap-1">
@@ -294,7 +298,7 @@
                             </svg>
                             Tunnel active
                         </p>
-                        <p class="text-xs text-gray-400 font-mono mt-1 truncate" x-text="config.baseUrl"></p>
+                        <p class="text-xs text-white font-mono mt-1 truncate" x-text="config.baseUrl"></p>
                     </div>
 
                     <div x-show="status.ngrokConfigured && !status.ngrokRunning" class="space-y-3">
@@ -306,7 +310,7 @@
                                 </svg>
                                 ngrok configured but not running
                             </p>
-                            <p class="text-xs text-gray-400 mt-1">Restart the server to start tunnel</p>
+                            <p class="text-xs text-white mt-1">Restart the server to start tunnel</p>
                         </div>
                     </div>
                 </div>
@@ -373,10 +377,11 @@
 
         <div class="space-y-4">
             <!-- 1M Context Toggle -->
-            <div class="flex items-center justify-between p-4 bg-space-900/50 rounded-lg border border-space-border">
+            <div
+                class="flex items-center justify-between p-4 bg-custom-dark-cyan/10 rounded-lg border border-custom-light-blue/30">
                 <div>
                     <h4 class="text-sm font-medium text-white">Gemini 1M Context Mode</h4>
-                    <p class="text-xs text-gray-500 mt-1">Enable 1 million token context window for all Gemini
+                    <p class="text-xs text-white mt-1">Enable 1 million token context window for all Gemini
                         models
                     </p>
                     <p class="text-[10px] text-yellow-500 mt-1 flex items-center gap-1">
@@ -394,14 +399,14 @@
 
 
             <!-- Regenerate API Key -->
-            <div class="p-4 bg-space-900/50 rounded-lg border border-space-border">
+            <div class="p-4 bg-custom-dark-cyan/10 rounded-lg border border-custom-light-blue/30">
                 <div class="flex items-center justify-between">
                     <div>
                         <h4 class="text-sm font-medium text-white">API Key</h4>
-                        <p class="text-xs text-gray-500 mt-1">Regenerate if compromised</p>
+                        <p class="text-xs text-white mt-1">Regenerate if compromised</p>
                     </div>
                     <button @click="regenerateApiKey()"
-                        class="btn btn-sm btn-ghost border border-space-border hover:bg-white/5 text-gray-300">
+                        class="btn btn-sm btn-ghost border border-space-border hover:bg-white/5 text-white">
                         Regenerate
                     </button>
                 </div>

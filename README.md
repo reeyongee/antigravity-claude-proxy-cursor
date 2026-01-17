@@ -31,7 +31,7 @@ The dashboard will open automatically at `http://localhost:8080`.
 ### 3. Configure Cursor
 In Cursor IDE, go to **Settings > Models > OpenAI** (or **General > Models** in newer versions):
 *   **Base URL:** Copy the **Ngrok URL** displayed on the dashboard (e.g., `https://xxxx-xx.ngrok-free.app/v1`)
-*   **API Key:** `sk-antigravity` (or any random text)
+*   **API Key:** `sk-antigravity....`
 *   **Model Name:** Add and select `claude-sonnet-4-5-thinking` or `gemini-3-pro-high`
 
 > **Note:** Cursor requires a public HTTPS URL (provided by Ngrok) to connect reliably. Localhost connections may fail.

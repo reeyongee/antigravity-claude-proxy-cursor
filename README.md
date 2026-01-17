@@ -1,4 +1,4 @@
-# Cursor Antigravity Proxy (Optimized for Cursor)
+# Antigravity Claude Proxy (Optimized for Cursor)
 
 This is a specialized fork of the **Antigravity Claude Proxy**, designed specifically to give **Cursor IDE** users access to advanced models like **Claude 4.5 Opus** and **Gemini 3 Pro** via Google's Cloud Code.
 

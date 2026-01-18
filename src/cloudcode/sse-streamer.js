@@ -32,18 +32,40 @@ export async function* streamSSEResponse(response, originalModel) {
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
+
+    // Stream tracking for timeout and logging
+    const streamStartTime = Date.now();
     let lastDataTime = Date.now();
+    let chunkCount = 0;
+    let totalBytes = 0;
+    let warningLogged = false;
+
+    logger.info(`[SSE] Stream started for model: ${originalModel}`);
 
     /**
      * Read with timeout - aborts if no data received within STREAM_READ_TIMEOUT_MS
+     * Note: This is an IDLE timeout, not a total request timeout.
+     * As long as data keeps flowing, the stream can run indefinitely.
      */
     async function readWithTimeout() {
         const timeoutPromise = new Promise((_, reject) => {
             const checkInterval = setInterval(() => {
-                if (Date.now() - lastDataTime > STREAM_READ_TIMEOUT_MS) {
+                const idleTime = Date.now() - lastDataTime;
+                const totalTime = Date.now() - streamStartTime;
+
+                // Log warning at 2 minutes of idle time
+                if (idleTime > 120000 && !warningLogged) {
+                    warningLogged = true;
+                    logger.warn(`[SSE] Stream idle for 2min (total: ${Math.round(totalTime / 1000)}s, chunks: ${chunkCount}, bytes: ${totalBytes}). Will timeout at 3min.`);
+                }
+
+                // Timeout at STREAM_READ_TIMEOUT_MS of idle time
+                if (idleTime > STREAM_READ_TIMEOUT_MS) {
                     clearInterval(checkInterval);
+                    const durationSec = Math.round(totalTime / 1000);
+                    logger.error(`[SSE] Stream timeout! Idle for ${Math.round(idleTime / 1000)}s. Total duration: ${durationSec}s, chunks: ${chunkCount}, bytes: ${totalBytes}`);
                     reader.cancel('Stream timeout - no data received').catch(() => { });
-                    reject(new Error(`Stream timeout after ${STREAM_READ_TIMEOUT_MS / 1000}s of inactivity`));
+                    reject(new Error(`Stream idle timeout after ${Math.round(idleTime / 1000)}s (total: ${durationSec}s). Received ${chunkCount} chunks, ${totalBytes} bytes before hang.`));
                 }
             }, 5000); // Check every 5 seconds
 
@@ -56,7 +78,21 @@ export async function* streamSSEResponse(response, originalModel) {
                 reader.read(),
                 timeoutPromise
             ]);
-            lastDataTime = Date.now();
+
+            // Update tracking on successful read
+            if (result.value) {
+                lastDataTime = Date.now();
+                chunkCount++;
+                totalBytes += result.value.length;
+                warningLogged = false; // Reset warning flag on data
+
+                // Log heartbeat every 50 chunks
+                if (chunkCount % 50 === 0) {
+                    const elapsedSec = Math.round((Date.now() - streamStartTime) / 1000);
+                    logger.debug(`[SSE] Streaming... ${chunkCount} chunks, ${Math.round(totalBytes / 1024)}KB, ${elapsedSec}s elapsed`);
+                }
+            }
+
             return result;
         } finally {
             if (readWithTimeout.cleanup) {
@@ -68,7 +104,11 @@ export async function* streamSSEResponse(response, originalModel) {
     try {
         while (true) {
             const { done, value } = await readWithTimeout();
-            if (done) break;
+            if (done) {
+                const durationSec = Math.round((Date.now() - streamStartTime) / 1000);
+                logger.info(`[SSE] Stream completed: ${chunkCount} chunks, ${Math.round(totalBytes / 1024)}KB, ${durationSec}s`);
+                break;
+            }
 
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split('\n');

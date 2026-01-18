@@ -99,7 +99,8 @@ export async function* sendMessageStream(anthropicRequest, accountManager, fallb
             const project = await accountManager.getProjectForAccount(account, token);
             const payload = buildCloudCodeRequest(anthropicRequest, project);
 
-            logger.debug(`[CloudCode] Starting stream for model: ${model}`);
+            const msgCount = anthropicRequest.messages?.length || 0;
+            logger.info(`[CloudCode] Starting stream: model=${model}, account=${account.email}, messages=${msgCount}`);
 
             // Try each endpoint for streaming
             let lastError = null;
@@ -108,6 +109,7 @@ export async function* sendMessageStream(anthropicRequest, accountManager, fallb
             for (const endpoint of ANTIGRAVITY_ENDPOINT_FALLBACKS) {
                 try {
                     const url = `${endpoint}/v1internal:streamGenerateContent?alt=sse`;
+                    logger.debug(`[CloudCode] Connecting to ${endpoint}...`);
 
                     const response = await fetch(url, {
                         method: 'POST',

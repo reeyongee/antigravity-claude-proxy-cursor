@@ -417,11 +417,47 @@ export function analyzeConversationState(messages) {
 }
 
 /**
+ * Check if any assistant message has text content but lacks valid thinking blocks.
+ * This happens when Cursor IDE strips thinking blocks in multi-turn conversations.
+ * 
+ * @param {Array<Object>} messages - Array of messages
+ * @returns {boolean} True if any assistant message has stripped thinking
+ */
+export function hasStrippedThinking(messages) {
+    if (!Array.isArray(messages)) return false;
+
+    for (const msg of messages) {
+        if (msg.role !== 'assistant' && msg.role !== 'model') continue;
+
+        const content = msg.content || msg.parts || [];
+        if (!Array.isArray(content)) continue;
+
+        // Check if message has text/tool_use content but no valid thinking blocks
+        const hasNonThinkingContent = content.some(block =>
+            block.type === 'text' || block.type === 'tool_use' ||
+            block.functionCall || (block.text && !block.thought)
+        );
+
+        const hasValidThinking = content.some(block =>
+            isThinkingPart(block) && hasValidSignature(block)
+        );
+
+        // If has content but no valid thinking, it's been stripped
+        if (hasNonThinkingContent && !hasValidThinking) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * Check if conversation needs thinking recovery.
  *
- * Recovery is only needed when:
- * 1. We're in a tool loop or have an interrupted tool, AND
- * 2. No valid thinking blocks exist in the current turn
+ * Recovery is needed when:
+ * 1. We're in a tool loop or have an interrupted tool with no valid thinking, OR
+ * 2. Any assistant message has text content but no thinking blocks
+ *    (happens when Cursor IDE strips thinking blocks in multi-turn conversations)
  *
  * Cross-model signature compatibility is handled by stripInvalidThinkingBlocks
  * during recovery (not here).
@@ -430,12 +466,15 @@ export function analyzeConversationState(messages) {
  * @returns {boolean} True if thinking recovery is needed
  */
 export function needsThinkingRecovery(messages) {
+    // Case 1: Cursor stripped thinking blocks from any assistant message
+    // This is the most common case - Cursor doesn't preserve thinking blocks
+    if (hasStrippedThinking(messages)) {
+        return true;
+    }
+
+    // Case 2: Tool loop or interrupted tool without thinking
     const state = analyzeConversationState(messages);
-
-    // Recovery is only needed in tool loops or interrupted tools
     if (!state.inToolLoop && !state.interruptedTool) return false;
-
-    // Need recovery if no valid thinking blocks exist
     return !state.turnHasThinking;
 }
 
@@ -498,13 +537,13 @@ function stripInvalidThinkingBlocks(messages, targetFamily = null) {
 }
 
 /**
- * Close tool loop by injecting synthetic messages.
+ * Apply thinking recovery by injecting synthetic messages.
  * This allows the model to start a fresh turn when thinking is corrupted.
  *
- * When thinking blocks are stripped (no valid signatures) and we're in the
- * middle of a tool loop OR have an interrupted tool, the conversation is in
- * a corrupted state. This function injects synthetic messages to close the
- * loop and allow the model to continue.
+ * Handles multiple scenarios:
+ * 1. Tool loops: assistant has tool_use, followed by tool_results
+ * 2. Interrupted tools: assistant has tool_use, but user sent new message
+ * 3. Stripped thinking: Cursor IDE stripped thinking blocks from history
  *
  * @param {Array<Object>} messages - Array of messages
  * @param {string} targetFamily - Target model family ('claude' or 'gemini')
@@ -512,9 +551,12 @@ function stripInvalidThinkingBlocks(messages, targetFamily = null) {
  */
 export function closeToolLoopForThinking(messages, targetFamily = null) {
     const state = analyzeConversationState(messages);
+    const hasStripped = hasStrippedThinking(messages);
 
-    // Handle neither tool loop nor interrupted tool
-    if (!state.inToolLoop && !state.interruptedTool) return messages;
+    // Check if we need any recovery
+    if (!state.inToolLoop && !state.interruptedTool && !hasStripped) {
+        return messages;
+    }
 
     // Strip only invalid/incompatible thinking blocks (keep valid ones)
     let modified = stripInvalidThinkingBlocks(messages, targetFamily);
@@ -552,7 +594,28 @@ export function closeToolLoopForThinking(messages, targetFamily = null) {
         });
 
         logger.debug('[ThinkingUtils] Applied thinking recovery for tool loop');
+    } else if (hasStripped) {
+        // For stripped thinking (multi-turn with no tool use):
+        // The conversation has assistant messages without thinking blocks.
+        // Add synthetic messages to close the turn and start fresh.
+
+        // Check if the last message is from the user (normal multi-turn)
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg && lastMsg.role === 'user') {
+            // User already sent a follow-up message, which is fine.
+            // Just strip invalid thinking - the user message closes the turn naturally.
+            logger.debug('[ThinkingUtils] Applied thinking recovery for stripped thinking (user follow-up)');
+        } else if (lastMsg && (lastMsg.role === 'assistant' || lastMsg.role === 'model')) {
+            // Last message is assistant without thinking - this shouldn't happen in normal flow
+            // Add a synthetic user message to close the turn
+            modified.push({
+                role: 'user',
+                content: [{ type: 'text', text: '[Continue]' }]
+            });
+            logger.debug('[ThinkingUtils] Applied thinking recovery for stripped thinking (assistant last)');
+        }
     }
 
     return modified;
 }
+

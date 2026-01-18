@@ -17,6 +17,7 @@ import {
     filterUnsignedThinkingBlocks,
     hasGeminiHistory,
     hasUnsignedThinkingBlocks,
+    hasStrippedThinking,
     needsThinkingRecovery,
     closeToolLoopForThinking
 } from './thinking-utils.js';
@@ -88,10 +89,9 @@ export function convertAnthropicToGoogle(anthropicRequest) {
         processedMessages = closeToolLoopForThinking(messages, 'gemini');
     }
 
-    // For Claude: apply recovery for cross-model (Gemini→Claude) or unsigned thinking blocks
-    // Unsigned thinking blocks occur when Claude Code strips signatures it doesn't understand
-    const needsClaudeRecovery = hasGeminiHistory(messages) || hasUnsignedThinkingBlocks(messages);
-    if (isClaudeModel && isThinking && needsClaudeRecovery && needsThinkingRecovery(messages)) {
+    // For Claude: apply recovery for cross-model switches, stripped thinking blocks, or tool loops
+    // needsThinkingRecovery now checks for Cursor-stripped thinking (most common case)
+    if (isClaudeModel && isThinking && needsThinkingRecovery(messages)) {
         logger.debug('[RequestConverter] Applying thinking recovery for Claude');
         processedMessages = closeToolLoopForThinking(messages, 'claude');
     }
